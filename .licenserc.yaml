@@ -1,0 +1,31 @@
+header:
+  license:
+    spdx-id: Apache-2.0
+    pattern: |
+      Copyright (c) \d{4} Bytedance Ltd. and/or its affiliates
+      SPDX-License-Identifier: Apache-2.0
+
+  paths:
+    - '**/*.go'
+    - '**/*.ts'
+    - '**/*.tsx'
+
+  paths-ignore:
+    - "**/mocks/**"
+    - "**/gorm_gen/**"
+    - "**/kitex_gen/**"
+    - "**/loop_gen/**"
+    - "**/wire_gen.go"
+    - "**/errno/**"
+    - "backend/script/cloudwego/tmpl/streaming.go"
+    - "backend/api/router/register.go"
+    - "backend/api/router/coze/loop/apis/coze.loop.apis.go"
+    - "backend/modules/observability/domain/trace/entity/collector/**/*.go"
+    - "backend/modules/observability/domain/trace/service/collector/processor/queueprocessor/queue_processor.go"
+
+  comment: on-failure
+
+dependency:
+  files:
+    - go.mod
+    - package.json

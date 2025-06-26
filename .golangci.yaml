@@ -1,0 +1,23 @@
+run:
+  timeout: 5m
+
+linters: # https://golangci-lint.run/usage/linters/
+  disable-all: true
+  enable:
+    - gosimple
+    - govet
+    - ineffassign
+    - staticcheck
+    - unused
+    - unconvert
+    - goimports
+    - gofmt
+    - gofumpt
+
+# Refer to https://golangci-lint.run/usage/linters
+linters-settings:
+  gofumpt:
+    # Choose whether to use the extra rules.
+    extra-rules: true
+  goimports:
+    local-prefixes: github.com/coze-dev/cozeloop

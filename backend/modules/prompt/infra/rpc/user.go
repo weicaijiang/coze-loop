@@ -1,0 +1,41 @@
+// Copyright (c) 2025 Bytedance Ltd. and/or its affiliates
+// SPDX-License-Identifier: Apache-2.0
+
+package rpc
+
+import (
+	"github.com/coze-dev/cozeloop/backend/kitex_gen/coze/loop/foundation/user"
+	"github.com/coze-dev/cozeloop/backend/kitex_gen/coze/loop/foundation/user/userservice"
+	"github.com/coze-dev/cozeloop/backend/modules/prompt/infra/rpc/convertor"
+	"context"
+
+	"github.com/coze-dev/cozeloop/backend/modules/prompt/domain/component/rpc"
+)
+
+type UserRPCAdapter struct {
+	client userservice.Client
+}
+
+func NewUserRPCProvider(client userservice.Client) rpc.IUserProvider {
+	return &UserRPCAdapter{
+		client: client,
+	}
+}
+
+func (u *UserRPCAdapter) MGetUserInfo(ctx context.Context, userIDs []string) (userInfos []*rpc.UserInfo, err error) {
+	if len(userIDs) <= 0 {
+		return nil, nil
+	}
+
+	req := &user.MGetUserInfoRequest{
+		UserIds: userIDs,
+	}
+	resp, err := u.client.MGetUserInfo(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+	if resp == nil {
+		return nil, nil
+	}
+	return convertor.BatchUserDTO2DO(resp.GetUserInfos()), nil
+}

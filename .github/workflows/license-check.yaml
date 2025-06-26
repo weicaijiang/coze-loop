@@ -1,0 +1,19 @@
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  license-check:
+    name: License Check
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: License Header Check
+        uses: apache/skywalking-eyes/header@v0.7.0
+      - name: License Dependency Check
+        uses: apache/skywalking-eyes/dependency@v0.7.0

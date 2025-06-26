@@ -1,0 +1,41 @@
+// Copyright (c) 2025 Bytedance Ltd. and/or its affiliates
+// SPDX-License-Identifier: Apache-2.0
+
+package entity
+
+import (
+	"github.com/coze-dev/cozeloop/backend/pkg/lang/ptr"
+	"github.com/stretchr/testify/assert"
+	"testing"
+)
+
+func TestScenarioValue(t *testing.T) {
+	type args struct {
+		scenario *Scenario
+	}
+	tests := []struct {
+		name string
+		args args
+		want Scenario
+	}{
+		{
+			name: "scenario nil",
+			args: args{
+				scenario: nil,
+			},
+			want: ScenarioDefault,
+		},
+		{
+			name: "scenario prompt debug",
+			args: args{
+				scenario: ptr.Of(ScenarioPromptDebug),
+			},
+			want: ScenarioPromptDebug,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			assert.Equalf(t, tt.want, ScenarioValue(tt.args.scenario), "ScenarioValue(%v)", tt.args.scenario)
+		})
+	}
+}

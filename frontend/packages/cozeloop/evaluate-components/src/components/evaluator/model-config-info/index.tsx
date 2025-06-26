@@ -1,0 +1,24 @@
+// Copyright (c) 2025 Bytedance Ltd. and/or its affiliates
+// SPDX-License-Identifier: Apache-2.0
+import { type ModelConfig } from '@cozeloop/api-schema/evaluation';
+
+import { useGlobalEvalConfig } from '@/stores/eval-global-config';
+
+export function ModelConfigInfo({ data }: { data?: ModelConfig }) {
+  const { modelConfigEditor: ModelConfigEditor } = useGlobalEvalConfig();
+
+  return (
+    <>
+      <div className="text-sm font-medium coz-fg-primary mb-2">{'模型'}</div>
+      {ModelConfigEditor && data ? (
+        <ModelConfigEditor
+          value={data}
+          disabled={true}
+          popoverProps={{ position: 'bottomRight' }}
+        />
+      ) : (
+        '-'
+      )}
+    </>
+  );
+}

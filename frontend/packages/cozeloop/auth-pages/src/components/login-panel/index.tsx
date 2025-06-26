@@ -1,0 +1,94 @@
+// Copyright (c) 2025 Bytedance Ltd. and/or its affiliates
+// SPDX-License-Identifier: Apache-2.0
+import { useState } from 'react';
+
+import { Input, Checkbox, Button } from '@coze-arch/coze-design';
+
+import loopBanner from '@/assets/loop-banner.png';
+
+import s from './index.module.less';
+
+interface Props {
+  loading?: boolean;
+  onLogin?: (email: string, password: string) => void;
+  onRegister?: (email: string, password: string) => void;
+}
+
+export function LoginPanel({ loading, onLogin, onRegister }: Props) {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [consent, setConsent] = useState(false);
+  const canSubmit = Boolean(email && password && consent);
+
+  const onClickRegister = () => {
+    onRegister?.(email, password);
+  };
+
+  const onClickLogin = () => {
+    onLogin?.(email, password);
+  };
+
+  return (
+    <div className={s.container}>
+      <div className="flex flex-col items-center">
+        <img src={loopBanner} className={s.banner} />
+        <div className="text-[18px] font-medium leading-[36px] my-[20px]">
+          {'欢迎使用扣子罗盘-社区版'}
+        </div>
+      </div>
+      <div className="w-[320px] flex flex-col items-stretch">
+        <Input
+          type="email"
+          value={email}
+          onChange={setEmail}
+          placeholder={'请输入邮箱'}
+        />
+        <Input
+          className="mt-[20px]"
+          type="password"
+          value={password}
+          onChange={setPassword}
+          placeholder={'请输入密码'}
+        />
+        <div className="mt-[20px] flex justify-between items-center">
+          <Button
+            className="w-[49%]"
+            disabled={!canSubmit}
+            onClick={onClickRegister}
+            loading={loading}
+            color="primary"
+          >
+            {'注册'}
+          </Button>
+          <Button
+            className="w-[49%]"
+            disabled={!canSubmit}
+            onClick={onClickLogin}
+            loading={loading}
+          >
+            {'登录'}
+          </Button>
+        </div>
+        <div className="mt-[20px] flex">
+          <Checkbox
+            checked={consent}
+            onChange={e => setConsent(Boolean(e.target.checked))}
+            disabled={loading}
+          >
+            {'请先同意'}
+            <a
+              href="" // 协议链接
+              target="_blank"
+              className="no-underline coz-fg-hglt"
+              onClick={e => {
+                e.stopPropagation();
+              }}
+            >
+              用户协议
+            </a>
+          </Checkbox>
+        </div>
+      </div>
+    </div>
+  );
+}

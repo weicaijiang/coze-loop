@@ -1,0 +1,99 @@
+- id: 0 # required, must be unique and bigger than 0
+  name: "your model name" # required
+  desc: "" # optional, description
+  ability: # optional
+    max_context_tokens: 65536 # Optional. This parameter only indicates the model capability and will not have any practical effect for the time being.
+    max_input_tokens: 65536 # Optional. This parameter only indicates the model capability and will not have any practical effect for the time being.
+    max_output_tokens: 8192 # Optional. This parameter only indicates the model capability and will not have any practical effect for the time being.
+    function_call: true # Optional. Default value is false. If this model wants to use function call capability, please set it to true.
+    json_mode: false # Optional. This parameter only indicates the model capability and will not have any practical effect for the time being.
+    multi_modal: true # Optional. Default value is false. If this model wants to use multi modal capability, please set it to true.
+    ability_multi_modal:
+      image: true # Optional. Default value is false. If this model wants to use multi modal image capability, please set it to true.
+      ability_image:
+        url_enabled: true # Optional. Default value is false. If this model wants to use multi modal image url capability, please set it to true.
+        binary_enabled: true # Optional. Default value is false. If this model wants to use multi modal image binary capability, please set it to true.
+        max_image_size: 20 # Optional. Unit is MB. Default value is 0, which means size is not limited.
+        max_image_count: 20 # Optional. Default value is 0, which means count is not limited.
+  frame: "eino" # Required. Options Include [eino]
+  protocol: "gemini" # Required. Options Include [ark, openai, deepseek, qwen, qianfan, ollama, gemini, claude, arkbot]
+  protocol_config: # Required.
+    base_url: "" # Optional. See Details in https://github.com/cloudwego/eino-ext/blob/main/components/model/gemini/gemini.go
+    api_key: "" # Required. See Details in https://github.com/cloudwego/eino-ext/blob/main/components/model/gemini/gemini.go
+    model: "" # Required. See Details in https://github.com/cloudwego/eino-ext/blob/main/components/model/gemini/gemini.go
+    protocol_config_gemini: #Optional
+      response_schema: "" # Optional. See Details in https://github.com/cloudwego/eino-ext/blob/main/components/model/gemini/gemini.go
+      enable_code_execution: "" # Optional. See Details in https://github.com/cloudwego/eino-ext/blob/main/components/model/gemini/gemini.go
+      safety_settings:  # Optional. See Details in https://github.com/cloudwego/eino-ext/blob/main/components/model/gemini/gemini.go
+        - category: 0
+        - threshold: 0
+  scenario_configs: # Optional. This is a map. Key is entity.Scenario, value is entity.ScenarioConfig.The scenario configuration has two functions: 1. Determine whether the model is available in the scenario; 2. Determine the qpm and tpm limits of the model in the scenario.
+    default:
+      scenario: "default"
+      quota:
+        qpm: 0 # Optional. Default value is 0, which means our system does not limit qpm.
+        tpm: 0 # Optional. Default value is 0, which means our system does not limit tpm.
+      unavailable: false # Optional. Default value is false.
+    prompt_debug:
+      scenario: "prompt_debug"
+      quota:
+        qpm: 0 # Optional. Default value is 0, which means our system does not limit qpm.
+        tpm: 0 # Optional. Default value is 0, which means our system does not limit tpm.
+      unavailable: false # Optional. Default value is false.
+    eval_target:
+      scenario: "eval_target"
+      quota:
+        qpm: 0 # Optional. Default value is 0, which means our system does not limit qpm.
+        tpm: 0 # Optional. Default value is 0, which means our system does not limit tpm.
+      unavailable: false # Optional. Default value is false.
+    evaluator:
+      scenario: "evaluator"
+      quota:
+        qpm: 0 # Optional. Default value is 0, which means our system does not limit qpm.
+        tpm: 0 # Optional. Default value is 0, which means our system does not limit tpm.
+      unavailable: false # Optional. Default value is false. If this model does not support function call, please set it to true because evaluator must use function call.
+  param_config: #Required.
+    param_schemas: #Required. This parameter determines which parameters of the model can be modified in the prompt and evaluator interface. Currently only supports following params.
+      - name: "temperature"
+        label: "生成随机性" # Displayed as a name on the front end
+        desc: "调高温度会使得模型的输出更多样性和创新性，反之，降低温度会使输出内容更加遵循指令要求但减少多样性。建议不要与 “Top p” 同时调整。" # Displayed as a description on the front end
+        type: "float" # Required. Must be float, int, bool, string
+        min: "0"
+        max: "1.0"
+        default_val: "0.7"
+      - name: "max_tokens"
+        label: "最大回复长度"  # Displayed as a name on the front end
+        desc: "控制模型输出的 Tokens 长度上限。通常 100 Tokens 约等于 150 个中文汉字。"
+        type: "int" # Required. Must be float, int, bool, string
+        min: "1"
+        max: "4096"
+        default_val: "2048"
+      - name: "top_k"
+        label: "顶部 k 概率采样"  # Displayed as a name on the front end
+        desc: "仅从概率最高的 k 个 token 中采样生成，限制候选范围，提升生成稳定性。" # Displayed as a description on the front end
+        type: "int" # Required. Must be float, int, bool, string
+        min: "1"
+        max: "100"
+        default_val: "50"
+      - name: "top_p"
+        label: "核采样概率"  # Displayed as a name on the front end
+        desc: "生成时选取累计概率达 top_p 的最小 token 集合，集合外 token 被排除，平衡多样性与合理性。" # Displayed as a description on the front end
+        type: "float" # Required. Must be float, int, bool, string
+        min: "0.001"
+        max: "1.0"
+        default_val: "0.7"
+      - name: "frequency_penalty"
+        label: "频率惩罚"  # Displayed as a name on the front end
+        desc: "惩罚已生成过的 token，频率越高惩罚越大，抑制重复内容。" # Displayed as a description on the front end
+        type: "float" # Required. Must be float, int, bool, string
+        min: "0"
+        max: "2.0"
+        default_val: "0"
+      - name: "presence_penalty"
+        label: "出现惩罚"  # Displayed as a name on the front end
+        desc: "惩罚所有出现过的 token，防止同一内容反复出现，增加内容多样性。" # Displayed as a description on the front end
+        type: "float" # Required. Must be float, int, bool, string
+        min: "0"
+        max: "2.0"
+        default_val: "0"
+

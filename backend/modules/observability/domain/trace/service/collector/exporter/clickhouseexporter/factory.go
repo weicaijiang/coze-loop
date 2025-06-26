@@ -1,0 +1,33 @@
+// Copyright (c) 2025 Bytedance Ltd. and/or its affiliates
+// SPDX-License-Identifier: Apache-2.0
+
+package clickhouseexporter
+
+import (
+	"context"
+
+	"github.com/coze-dev/cozeloop/backend/modules/observability/domain/trace/entity/collector/component"
+	"github.com/coze-dev/cozeloop/backend/modules/observability/domain/trace/entity/collector/exporter"
+	"github.com/coze-dev/cozeloop/backend/modules/observability/domain/trace/repo"
+)
+
+const (
+	exporterType = "clickhouse"
+)
+
+func createDefaultConfig() component.Config {
+	return &Config{}
+}
+
+func NewFactory(traceRepo repo.ITraceRepo) exporter.Factory {
+	return exporter.NewFactory(
+		exporterType,
+		createDefaultConfig,
+		func(ctx context.Context, params exporter.CreateSettings, cfg component.Config) (exporter.Exporter, error) {
+			return &ckExporter{
+				config:    cfg.(*Config),
+				traceRepo: traceRepo,
+			}, nil
+		},
+	)
+}

@@ -1,0 +1,27 @@
+{
+  "name": "@cozeloop/i18n-adapter",
+  "version": "0.0.1",
+  "description": "I18n For CozeLoop",
+  "author": "qihai@bytedance.com",
+  "main": "./src/index.ts",
+  "scripts": {
+    "build": "exit 0",
+    "lint": "eslint ./ --cache",
+    "test": "NODE_OPTIONS='--max_old_space_size=2048' NODE_ENV=test vitest --run --passWithNoTests",
+    "test:cov": "npm run test -- --coverage"
+  },
+  "dependencies": {
+    "@coze-studio/loop-i18n-resource-adapter": "workspace:*",
+    "@coze-studio/studio-i18n-resource-adapter": "workspace:*",
+    "@coze-arch/i18n": "workspace:*",
+    "i18next-browser-languagedetector": "8.0.4"
+  },
+  "devDependencies": {
+    "@coze-arch/eslint-config": "workspace:*",
+    "@coze-arch/ts-config": "workspace:*",
+    "@coze-arch/vitest-config": "workspace:*",
+    "@vitest/coverage-v8": "~3.0.5",
+    "typescript": "~5.8.2",
+    "vitest": "~3.0.5"
+  }
+}

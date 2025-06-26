@@ -1,0 +1,61 @@
+// Copyright (c) 2025 Bytedance Ltd. and/or its affiliates
+// SPDX-License-Identifier: Apache-2.0
+
+package middleware
+
+import (
+	"context"
+	"fmt"
+
+	"github.com/cloudwego/hertz/pkg/app"
+
+	"github.com/coze-dev/cozeloop/backend/infra/middleware/session"
+	"github.com/coze-dev/cozeloop/backend/kitex_gen/coze/loop/foundation/user"
+	"github.com/coze-dev/cozeloop/backend/kitex_gen/coze/loop/foundation/user/userservice"
+	"github.com/coze-dev/cozeloop/backend/pkg/lang/ptr"
+)
+
+const MockAppID = 1234
+
+func SessionMW(ss session.ISessionService, us userservice.Client) app.HandlerFunc {
+	return func(ctx context.Context, c *app.RequestContext) {
+		path := string(c.Path())
+		if path == "/api/foundation/v1/users/login_by_password" ||
+			path == "/api/foundation/v1/users/register" ||
+			path == "/api/foundation/v1/users/reset_password" {
+			c.Next(ctx)
+			return
+		}
+
+		sess, err := ss.ValidateSession(ctx, string(c.Cookie(session.SessionKey)))
+		if err != nil {
+			_ = c.Error(err)
+			c.Abort()
+			return
+		}
+
+		resp, err := us.GetUserInfo(ctx, &user.GetUserInfoRequest{
+			UserID: ptr.Of(sess.UserID),
+		})
+		if err != nil {
+			_ = c.Error(err)
+			c.Abort()
+			return
+		}
+
+		if resp.GetUserInfo() == nil {
+			_ = c.Error(fmt.Errorf("invalid session user, user_id %s not found", sess.UserID))
+			c.Abort()
+			return
+		}
+
+		ctx = session.WithCtxUser(ctx, &session.User{
+			AppID: MockAppID,
+			ID:    sess.UserID,
+			Name:  resp.GetUserInfo().GetName(),
+			Email: resp.GetUserInfo().GetEmail(),
+		})
+
+		c.Next(ctx)
+	}
+}

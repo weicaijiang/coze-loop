@@ -1,0 +1,47 @@
+// Copyright (c) 2025 Bytedance Ltd. and/or its affiliates
+// SPDX-License-Identifier: Apache-2.0
+import { useSearchParams } from 'react-router-dom';
+import { useEffect, useRef } from 'react';
+
+import { EVENT_NAMES, sendEvent } from '@cozeloop/tea-adapter';
+import { useEvalTargetDefinition } from '@cozeloop/evaluate-components';
+import { useBreadcrumb } from '@cozeloop/base-hooks';
+
+import { getCurrentTime } from '../tools';
+
+// 创建实验页面初始化的一些业务逻辑
+export const useExptPageInit = () => {
+  const startTimeRef = useRef<number>(0);
+  const newTimeRef = useRef<number>(0);
+  const [searchParams] = useSearchParams();
+
+  const { getEvalTargetDefinitionList, getEvalTargetDefinition } =
+    useEvalTargetDefinition();
+
+  const pluginEvaluatorList = getEvalTargetDefinitionList();
+
+  useEffect(() => {
+    // 进入创建页面时打点, 并记录开始时间
+    sendEvent(EVENT_NAMES.cozeloop_experiment_enter_create_page);
+    const currentTime = getCurrentTime();
+    startTimeRef.current = currentTime;
+    newTimeRef.current = currentTime;
+    return () => {
+      startTimeRef.current = 0;
+      newTimeRef.current = 0;
+    };
+  }, []);
+
+  // 面包屑
+  useBreadcrumb({
+    text: '新建实验',
+  });
+
+  return {
+    searchParams,
+    startTimeRef,
+    newTimeRef,
+    pluginEvaluatorList,
+    getEvalTargetDefinition,
+  };
+};

@@ -1,0 +1,30 @@
+{
+  "version": "0.2",
+  "ignorePaths": [],
+  "dictionaryDefinitions": [],
+  "dictionaries": [],
+  "caseSensitive": false,
+  "words": [
+    "ahooks",
+    "autoinstaller",
+    "autoinstallers",
+    "Bytedance",
+    "cozeloop",
+    "dotenv",
+    "eslintcache",
+    "immer",
+    "pnpmfile",
+    "Popconfirm",
+    "rsbuild",
+    "rspack",
+    "rushstack",
+    "rushx",
+    "stylelint",
+    "tailwindcss",
+    "tanstack",
+    "webp",
+    "zustand"
+  ],
+  "ignoreWords": [],
+  "import": []
+}

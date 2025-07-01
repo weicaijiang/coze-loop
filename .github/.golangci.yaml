@@ -1,15 +1,23 @@
+version: "2"
+
 run:
   timeout: 5m
+  skip-dirs:
+    - kitex_gen
+    - loop_gen
+    - gorm_gen
 
 linters: # https://golangci-lint.run/usage/linters/
   disable-all: true
   enable:
-    - gosimple
     - govet
     - ineffassign
     - staticcheck
     - unused
     - unconvert
+
+formatters:
+  enable:
     - goimports
     - gofmt
     - gofumpt
@@ -20,4 +28,3 @@ linters-settings:
     # Choose whether to use the extra rules.
     extra-rules: true
   goimports:
-    local-prefixes: github.com/coze-dev/cozeloop

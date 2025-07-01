@@ -1,36 +1,44 @@
+name: CI@backend
+
 on:
   push:
-    branches:
-      - main
+    branches: ["main"]
     paths:
       - 'backend/**'
       - '.github/workflows/backend-ci.yaml'
   pull_request:
-    branches:
-      - main
+    branches: ["main"]
     paths:
       - 'backend/**'
       - '.github/workflows/backend-ci.yaml'
 
 jobs:
-  golangci-lint:
+  golang-lint:
     name: Golang CI Lint
     runs-on: ubuntu-latest
     defaults:
       run:
         working-directory: ./backend
     steps:
-      - uses: actions/checkout@v4
-      - name: Set up Go
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Go
         uses: actions/setup-go@v5
         with:
           go-version: "1.23.4"
-      - name: Golangci Lint
+
+      - name: Golang Lint
         # https://golangci-lint.run/
-        uses: golangci/golangci-lint-action@v6
-        with:
-          version: latest
-          only-new-issues: true
+        run: |
+          # Install golangci-lint
+          curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin v2.2.1
+          
+          # Add golangci-lint to PATH
+          export PATH=$PATH:$(go env GOPATH)/bin
+          
+          # Run golangci-lint
+          golangci-lint run --config ../.github/.golangci.yaml
 
   build-and-unittest:
     name: Build and Unit Test
@@ -41,19 +49,25 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-      - name: Set up Go
+
+      - name: Setup Go
         uses: actions/setup-go@v5
         with:
           go-version: "1.23.4"
+
       - name: Build
         run: go build -v ./...
+
       - name: Run Unit Tests
-        run: go test -gcflags="all=-N -l" -race -v -coverprofile=coverage.out -coverpkg=./... ./...
+        run: |
+          go test -gcflags="all=-N -l" -race -v -coverprofile=coverage.out -coverpkg=./... ./...
+
       - name: Upload Coverage to Codecov
         uses: codecov/codecov-action@v5
         with:
-          file: ./coverage.out
+          files: ./coverage.out
           flags: unittests
+          slug: coze-dev/cozeloop
           fail_ci_if_error: false
           verbose: true
           token: ${{ secrets.CODECOV_TOKEN }}

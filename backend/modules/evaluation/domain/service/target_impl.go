@@ -9,33 +9,28 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/coze-dev/cozeloop/backend/pkg/json"
-
-	"github.com/coze-dev/cozeloop/backend/modules/evaluation/domain/component/metrics"
-
+	"github.com/bytedance/gg/gptr"
 	"github.com/bytedance/sonic"
 	"github.com/coze-dev/cozeloop-go"
 	"github.com/coze-dev/cozeloop-go/spec/tracespec"
 
-	"github.com/bytedance/gg/gptr"
-
 	"github.com/coze-dev/cozeloop/backend/infra/idgen"
 	"github.com/coze-dev/cozeloop/backend/infra/looptracer"
 	"github.com/coze-dev/cozeloop/backend/infra/middleware/session"
-	"github.com/coze-dev/cozeloop/backend/modules/evaluation/domain/component/rpc"
+	"github.com/coze-dev/cozeloop/backend/modules/evaluation/domain/component/metrics"
 	"github.com/coze-dev/cozeloop/backend/modules/evaluation/domain/entity"
 	"github.com/coze-dev/cozeloop/backend/modules/evaluation/domain/repo"
 	"github.com/coze-dev/cozeloop/backend/modules/evaluation/pkg/errno"
 	"github.com/coze-dev/cozeloop/backend/pkg/errorx"
+	"github.com/coze-dev/cozeloop/backend/pkg/json"
 	"github.com/coze-dev/cozeloop/backend/pkg/logs"
 )
 
 type EvalTargetServiceImpl struct {
-	idgen            idgen.IIDGenerator
-	metric           metrics.EvalTargetMetrics
-	promptRPCAdapter rpc.IPromptRPCAdapter
-	evalTargetRepo   repo.IEvalTargetRepo
-	typedOperators   map[entity.EvalTargetType]ISourceEvalTargetOperateService
+	idgen          idgen.IIDGenerator
+	metric         metrics.EvalTargetMetrics
+	evalTargetRepo repo.IEvalTargetRepo
+	typedOperators map[entity.EvalTargetType]ISourceEvalTargetOperateService
 }
 
 func NewEvalTargetServiceImpl(evalTargetRepo repo.IEvalTargetRepo,
@@ -140,7 +135,7 @@ func (e *EvalTargetServiceImpl) ExecuteTarget(ctx context.Context, spaceID int64
 	}
 
 	var outputData *entity.EvalTargetOutputData
-	var runStatus = entity.EvalTargetRunStatusUnknown
+	runStatus := entity.EvalTargetRunStatusUnknown
 
 	defer func() {
 		if e := recover(); e != nil {
@@ -232,7 +227,6 @@ func (e *EvalTargetServiceImpl) ExecuteTarget(ctx context.Context, spaceID int64
 			return
 		}
 		err = nil
-		return
 	}()
 
 	evalTargetDO, err := e.GetEvalTargetVersion(ctx, spaceID, targetVersionID, false)
@@ -293,7 +287,6 @@ func (e *EvalTargetServiceImpl) BatchGetRecordByIDs(ctx context.Context, spaceID
 }
 
 func setSpanInputOutput(spanParam *targetSpanTagsParams, do *entity.EvalTarget, inputData *entity.EvalTargetInputData, outputData *entity.EvalTargetOutputData) {
-
 	spanParam.TargetType = do.EvalTargetType.String()
 	spanParam.TargetID = do.SourceTargetID
 	spanParam.TargetVersion = do.EvalTargetVersion.SourceTargetVersion
@@ -320,7 +313,6 @@ func setSpanInputOutput(spanParam *targetSpanTagsParams, do *entity.EvalTarget, 
 		spanParam.InputToken = outputData.EvalTargetUsage.InputTokens
 		spanParam.OutputToken = outputData.EvalTargetUsage.OutputTokens
 	}
-
 }
 
 type targetSpanTagsParams struct {

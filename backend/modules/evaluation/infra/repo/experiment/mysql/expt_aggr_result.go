@@ -7,10 +7,9 @@ import (
 	"context"
 	"errors"
 
+	"github.com/bytedance/gg/gptr"
 	"gorm.io/gorm"
 	"gorm.io/gorm/clause"
-
-	"github.com/bytedance/gg/gptr"
 
 	"github.com/coze-dev/cozeloop/backend/infra/db"
 	"github.com/coze-dev/cozeloop/backend/modules/evaluation/infra/repo/experiment/mysql/gorm_gen/model"
@@ -138,7 +137,6 @@ func (dao *ExptAggrResultDAOImpl) UpdateAndGetLatestVersion(ctx context.Context,
 			"version": gorm.Expr("version + ?", 1),
 			"status":  calculateStatusCalculating,
 		}).Error
-
 	if err != nil {
 		return 0, err
 	}

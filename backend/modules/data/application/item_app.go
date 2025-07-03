@@ -8,13 +8,10 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/pkg/errors"
-
-	"github.com/bytedance/gg/gptr"
-
-	"github.com/bytedance/gg/gslice"
-
 	"github.com/bytedance/gg/collection/set"
+	"github.com/bytedance/gg/gptr"
+	"github.com/bytedance/gg/gslice"
+	"github.com/pkg/errors"
 
 	"github.com/coze-dev/cozeloop/backend/infra/middleware/session"
 	"github.com/coze-dev/cozeloop/backend/kitex_gen/coze/loop/data/dataset"
@@ -53,6 +50,7 @@ func (h *DatasetApplicationImpl) BatchCreateDatasetItems(ctx context.Context, re
 	}
 	return h.buildResp(rc, added), nil
 }
+
 func (h *DatasetApplicationImpl) UpdateDatasetItem(ctx context.Context, req *dataset.UpdateDatasetItemRequest) (resp *dataset.UpdateDatasetItemResponse, err error) {
 	// 鉴权
 	err = h.authByDatasetID(ctx, req.GetWorkspaceID(), req.GetDatasetID(), rpc.CommonActionEdit)
@@ -91,6 +89,7 @@ func (h *DatasetApplicationImpl) UpdateDatasetItem(ctx context.Context, req *dat
 
 	return &dataset.UpdateDatasetItemResponse{}, nil
 }
+
 func (h *DatasetApplicationImpl) DeleteDatasetItem(ctx context.Context, req *dataset.DeleteDatasetItemRequest) (resp *dataset.DeleteDatasetItemResponse, err error) {
 	var (
 		spaceID   = req.GetWorkspaceID()
@@ -118,6 +117,7 @@ func (h *DatasetApplicationImpl) DeleteDatasetItem(ctx context.Context, req *dat
 	logs.CtxInfo(ctx, "delete dataset item success, space_id=%d, dataset_id=%d, item_id=%d", spaceID, datasetID, itemID)
 	return &dataset.DeleteDatasetItemResponse{}, nil
 }
+
 func (h *DatasetApplicationImpl) BatchDeleteDatasetItems(ctx context.Context, req *dataset.BatchDeleteDatasetItemsRequest) (resp *dataset.BatchDeleteDatasetItemsResponse, err error) {
 	// 鉴权
 	err = h.authByDatasetID(ctx, req.GetWorkspaceID(), req.GetDatasetID(), rpc.CommonActionEdit)
@@ -139,6 +139,7 @@ func (h *DatasetApplicationImpl) BatchDeleteDatasetItems(ctx context.Context, re
 	}
 	return &dataset.BatchDeleteDatasetItemsResponse{}, nil
 }
+
 func (h *DatasetApplicationImpl) ListDatasetItems(ctx context.Context, req *dataset.ListDatasetItemsRequest) (resp *dataset.ListDatasetItemsResponse, err error) {
 	// 鉴权
 	err = h.authByDatasetID(ctx, req.GetWorkspaceID(), req.GetDatasetID(), rpc.CommonActionRead)
@@ -238,6 +239,7 @@ func (h *DatasetApplicationImpl) GetDatasetItem(ctx context.Context, req *datase
 	}
 	return &dataset.GetDatasetItemResponse{Item: convertor.ItemDO2DTO(item)}, nil
 }
+
 func (h *DatasetApplicationImpl) BatchGetDatasetItems(ctx context.Context, req *dataset.BatchGetDatasetItemsRequest) (resp *dataset.BatchGetDatasetItemsResponse, err error) {
 	// 鉴权
 	err = h.authByDatasetID(ctx, req.GetWorkspaceID(), req.GetDatasetID(), rpc.CommonActionRead)
@@ -269,6 +271,7 @@ func (h *DatasetApplicationImpl) BatchGetDatasetItems(ctx context.Context, req *
 	service.SanitizeOutputItem(ds.Schema, items)
 	return &dataset.BatchGetDatasetItemsResponse{Items: gslice.Map(items, convertor.ItemDO2DTO)}, nil
 }
+
 func (h *DatasetApplicationImpl) BatchGetDatasetItemsByVersion(ctx context.Context, req *dataset.BatchGetDatasetItemsByVersionRequest) (resp *dataset.BatchGetDatasetItemsByVersionResponse, err error) {
 	// 鉴权
 	err = h.authByDatasetID(ctx, req.GetWorkspaceID(), req.GetDatasetID(), rpc.CommonActionRead)
@@ -388,8 +391,8 @@ func (h *DatasetApplicationImpl) prepare(ctx context.Context, req *dataset.Batch
 	if err != nil {
 		return nil, err
 	}
-	if !ds.Dataset.CanWriteItem() {
-		return nil, errno.DatasetNotEditableCodeError("dataset_status=%s", ds.Dataset.Status)
+	if !ds.CanWriteItem() {
+		return nil, errno.DatasetNotEditableCodeError("dataset_status=%s", ds.Status)
 	}
 
 	// check item size and schema

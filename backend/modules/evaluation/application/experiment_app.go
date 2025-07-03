@@ -8,8 +8,6 @@ import (
 	"fmt"
 	"strconv"
 
-	"github.com/coze-dev/cozeloop/backend/pkg/lang/slices"
-
 	"github.com/bytedance/gg/gptr"
 
 	"github.com/coze-dev/cozeloop/backend/infra/idgen"
@@ -30,6 +28,7 @@ import (
 	"github.com/coze-dev/cozeloop/backend/modules/evaluation/pkg/errno"
 	"github.com/coze-dev/cozeloop/backend/pkg/errorx"
 	"github.com/coze-dev/cozeloop/backend/pkg/json"
+	"github.com/coze-dev/cozeloop/backend/pkg/lang/slices"
 	"github.com/coze-dev/cozeloop/backend/pkg/logs"
 )
 
@@ -550,7 +549,7 @@ func (e *experimentApplication) BatchGetExperimentResult_(ctx context.Context, r
 }
 
 func (e *experimentApplication) BatchGetExperimentAggrResult_(ctx context.Context, req *expt.BatchGetExperimentAggrResultRequest) (r *expt.BatchGetExperimentAggrResultResponse, err error) {
-	aggrResults, err := e.ExptAggrResultService.BatchGetExptAggrResultByExperimentIDs(ctx, req.WorkspaceID, req.ExperimentIds)
+	aggrResults, err := e.BatchGetExptAggrResultByExperimentIDs(ctx, req.WorkspaceID, req.ExperimentIds)
 	if err != nil {
 		return nil, err
 	}
@@ -660,7 +659,6 @@ func (e *experimentApplication) InvokeExperiment(ctx context.Context, req *expt.
 		Errors:     evaluation_set.ItemErrorGroupDO2DTOs(evalSetErrors),
 		BaseResp:   base.NewBaseResp(),
 	}, nil
-
 }
 
 func (e *experimentApplication) FinishExperiment(ctx context.Context, req *expt.FinishExperimentRequest) (r *expt.FinishExperimentResponse, err error) {

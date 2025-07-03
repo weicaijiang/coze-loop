@@ -9,10 +9,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/stretchr/testify/require"
-
 	"github.com/stretchr/testify/assert"
-
+	"github.com/stretchr/testify/require"
 	"github.com/xeipuuv/gojsonschema"
 )
 
@@ -351,7 +349,8 @@ func TestFieldSchema_ValidateData(t *testing.T) {
 				},
 			},
 			wantErr: false,
-		}, {
+		},
+		{
 			name: "Test image data, space is nil",
 			fields: fields{
 				Key:         "test",
@@ -364,7 +363,8 @@ func TestFieldSchema_ValidateData(t *testing.T) {
 				},
 			},
 			wantErr: false,
-		}, {
+		},
+		{
 			name: "Test image data, count err",
 			fields: fields{
 				Key:         "test",
@@ -667,7 +667,8 @@ func TestFieldSchemaValidateData(t *testing.T) {
 			schema:  &FieldSchema{Key: "key1", ContentType: ContentTypeText},
 			data:    &FieldData{Key: "key2", ContentType: ContentTypeText},
 			wantErr: assert.Error,
-		}, {
+		},
+		{
 			name:    "text schema key",
 			schema:  &FieldSchema{SchemaKey: SchemaKeyInteger, ContentType: ContentTypeText},
 			data:    &FieldData{Content: "123"},
@@ -699,7 +700,8 @@ func TestFieldSchemaValidateData(t *testing.T) {
 				{Provider: "tos", URI: "test2.jpg"},
 			}},
 			wantErr: assert.Error,
-		}, {
+		},
+		{
 			name:    "invalid json", // only valid json allowed to be checked by jsonSchema, otherwise the input content may be truncated
 			schema:  &FieldSchema{ContentType: ContentTypeText, SchemaKey: SchemaKeyInteger},
 			data:    &FieldData{Content: `2024-01-01`},
@@ -712,9 +714,9 @@ func TestFieldSchemaValidateData(t *testing.T) {
 			wantErr: assert.NoError,
 		},
 		{
-			name:   "content with control character",
-			schema: &FieldSchema{ContentType: ContentTypeText, SchemaKey: SchemaKeyString},
-			data: &FieldData{Content: `Let $*$ be an operation`},
+			name:    "content with control character",
+			schema:  &FieldSchema{ContentType: ContentTypeText, SchemaKey: SchemaKeyString},
+			data:    &FieldData{Content: `Let \x03$*$ be an operation`},
 			wantErr: assert.NoError,
 		},
 		{

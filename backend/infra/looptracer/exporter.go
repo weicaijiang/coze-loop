@@ -29,8 +29,7 @@ const (
 	XttEnv    = "x_tt_env"
 )
 
-type MultiSpaceSpanExporter struct {
-}
+type MultiSpaceSpanExporter struct{}
 
 func (e *MultiSpaceSpanExporter) ExportSpans(ctx context.Context, spans []*entity.UploadSpan) error {
 	finalSpans := make([]*span.InputSpan, 0, len(spans))
@@ -70,7 +69,7 @@ func (e *MultiSpaceSpanExporter) ExportSpans(ctx context.Context, spans []*entit
 	}
 
 	if env := os.Getenv(XttEnv); env != "" {
-		ctx = context.WithValue(ctx, CtxKeyEnv, env)
+		ctx = context.WithValue(ctx, CtxKeyEnv, env) //nolint:staticcheck,SA1029
 	}
 	resp, err := rpc.GetLoopTracerHandler().LocalTraceService.IngestTracesInner(ctx, req)
 	if err != nil {

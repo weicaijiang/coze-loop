@@ -5,7 +5,6 @@ package dataset
 
 import (
 	"github.com/bytedance/gg/gptr"
-
 	"github.com/bytedance/gg/gslice"
 
 	"github.com/coze-dev/cozeloop/backend/kitex_gen/coze/loop/data/domain/dataset"
@@ -95,6 +94,7 @@ func DatasetIOFileDO2DTO(dto *entity.DatasetIOFile) *dataset_job.DatasetIOFile {
 		Files:          dto.Files,
 	}
 }
+
 func DatasetIODatasetDO2DTO(dto *entity.DatasetIODataset) *dataset_job.DatasetIODataset {
 	if dto == nil {
 		return nil

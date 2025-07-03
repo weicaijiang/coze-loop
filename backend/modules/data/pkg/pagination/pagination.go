@@ -9,15 +9,13 @@ import (
 	"reflect"
 	"time"
 
-	"github.com/coze-dev/cozeloop/backend/pkg/lang/goroutine"
-
-	"github.com/coze-dev/cozeloop/backend/modules/data/pkg/errno"
-
 	"github.com/bytedance/gg/gptr"
-
 	"github.com/pkg/errors"
 	"gorm.io/gorm"
 	"gorm.io/gorm/clause"
+
+	"github.com/coze-dev/cozeloop/backend/modules/data/pkg/errno"
+	"github.com/coze-dev/cozeloop/backend/pkg/lang/goroutine"
 )
 
 const (
@@ -38,7 +36,6 @@ type Paginator struct {
 	limit      int
 	offset     int
 	rawCursor  string
-	countTotal bool
 	err        error
 	cursor     *Cursor
 	result     *PageResult
@@ -235,7 +232,7 @@ func (p *Paginator) orderBy() string {
 		suffix = " asc"
 	}
 
-	switch {
+	switch { //nolint:staticcheck
 	case p.timeColumn == "":
 		return p.idColumn + suffix
 	default:

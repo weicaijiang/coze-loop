@@ -8,12 +8,11 @@ import (
 	"strings"
 	"time"
 
+	"github.com/bytedance/gg/gslice"
 	"github.com/bytedance/sonic"
 	"github.com/hashicorp/go-multierror"
 	"github.com/pkg/errors"
 	"github.com/xeipuuv/gojsonschema"
-
-	"github.com/bytedance/gg/gslice"
 
 	"github.com/coze-dev/cozeloop/backend/modules/data/pkg/consts"
 )
@@ -37,6 +36,7 @@ type DatasetSchema struct {
 func (s *DatasetSchema) AvailableFields() []*FieldSchema {
 	return gslice.Filter(s.Fields, func(s *FieldSchema) bool { return s.Status == FieldStatusAvailable || s.Status == "" })
 }
+
 func (s *DatasetSchema) GetID() int64 {
 	return s.ID
 }

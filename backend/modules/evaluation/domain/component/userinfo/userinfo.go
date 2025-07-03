@@ -6,6 +6,8 @@ package userinfo
 import (
 	"context"
 
+	"github.com/bytedance/gg/gptr"
+
 	commondto "github.com/coze-dev/cozeloop/backend/kitex_gen/coze/loop/evaluation/domain/common"
 	common_convertor "github.com/coze-dev/cozeloop/backend/modules/evaluation/application/convertor/common"
 	"github.com/coze-dev/cozeloop/backend/modules/evaluation/domain/component/rpc"
@@ -14,7 +16,6 @@ import (
 	"github.com/coze-dev/cozeloop/backend/pkg/errorx"
 	"github.com/coze-dev/cozeloop/backend/pkg/json"
 	"github.com/coze-dev/cozeloop/backend/pkg/logs"
-	"github.com/bytedance/gg/gptr"
 )
 
 type UserInfoCarrier interface {
@@ -43,7 +44,6 @@ func NewUserInfoServiceImpl(userProvider rpc.IUserProvider) UserInfoService {
 }
 
 func (u *UserInfoServiceImpl) GetUserInfo(ctx context.Context, userID string) (*commondto.UserInfo, error) {
-
 	infos, err := u.userProvider.MGetUserInfo(ctx, []string{userID})
 	if err != nil {
 		return nil, errorx.WrapByCode(err, evalerr.CommonRPCErrorCode)
@@ -54,7 +54,6 @@ func (u *UserInfoServiceImpl) GetUserInfo(ctx context.Context, userID string) (*
 	}
 
 	return common_convertor.ConvertUserInfoDO2DTO(infos[0]), nil
-
 }
 
 func (u *UserInfoServiceImpl) PackUserInfo(ctx context.Context, userInfoCarriers interface{}) {

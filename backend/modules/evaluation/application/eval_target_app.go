@@ -36,7 +36,8 @@ var (
 )
 
 func NewEvalTargetHandlerImpl(auth rpc.IAuthProvider, evalTargetService service.IEvalTargetService,
-	typedOperators map[entity.EvalTargetType]service.ISourceEvalTargetOperateService) evaluation.EvalTargetService {
+	typedOperators map[entity.EvalTargetType]service.ISourceEvalTargetOperateService,
+) evaluation.EvalTargetService {
 	evalTargetHandlerOnce.Do(func() {
 		evalTargetHandler = &EvalTargetApplicationImpl{
 			auth:              auth,
@@ -77,7 +78,6 @@ func (e EvalTargetApplicationImpl) CreateEvalTarget(ctx context.Context, request
 		entity.EvalTargetType(request.Param.GetEvalTargetType()),
 		entity.WithCozeBotPublishVersion(request.Param.BotPublishVersion),
 		entity.WithCozeBotInfoType(entity.CozeBotInfoType(request.Param.GetBotInfoType())))
-
 	if err != nil {
 		return nil, err
 	}
@@ -91,7 +91,7 @@ func (e EvalTargetApplicationImpl) BatchGetEvalTargetsBySource(ctx context.Conte
 	if request == nil {
 		return nil, errorx.NewByCode(errno.CommonInvalidParamCode, errorx.WithExtraMsg("req is nil"))
 	}
-	if request.SourceTargetIds == nil || len(request.SourceTargetIds) == 0 {
+	if len(request.SourceTargetIds) == 0 {
 		return nil, errorx.NewByCode(errno.CommonInvalidParamCode, errorx.WithExtraMsg("source target id is nil"))
 	}
 	if request.EvalTargetType == nil {
@@ -114,7 +114,7 @@ func (e EvalTargetApplicationImpl) BatchGetEvalTargetsBySource(ctx context.Conte
 	if err != nil {
 		return nil, err
 	}
-	if evalTargets == nil || len(evalTargets) == 0 {
+	if len(evalTargets) == 0 {
 		return &eval_target.BatchGetEvalTargetsBySourceResponse{}, nil
 	}
 	// 包装source info信息
@@ -167,7 +167,7 @@ func (e EvalTargetApplicationImpl) BatchGetEvalTargetVersions(ctx context.Contex
 	if request == nil {
 		return nil, errorx.NewByCode(errno.CommonInvalidParamCode, errorx.WithExtraMsg("req is nil"))
 	}
-	if request.EvalTargetVersionIds == nil || len(request.EvalTargetVersionIds) == 0 {
+	if len(request.EvalTargetVersionIds) == 0 {
 		return nil, errorx.NewByCode(errno.CommonInvalidParamCode, errorx.WithExtraMsg("target ids is nil"))
 	}
 	// 鉴权

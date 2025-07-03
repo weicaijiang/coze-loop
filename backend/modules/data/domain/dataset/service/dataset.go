@@ -6,10 +6,8 @@ package service
 import (
 	"context"
 
-	"github.com/bytedance/gg/gptr"
-
 	"github.com/bytedance/gg/gcond"
-
+	"github.com/bytedance/gg/gptr"
 	"github.com/bytedance/gg/gslice"
 
 	"github.com/coze-dev/cozeloop/backend/modules/data/domain/dataset/entity"
@@ -68,6 +66,7 @@ func (s *DatasetServiceImpl) DeleteDataset(ctx context.Context, spaceID, id int6
 func (s *DatasetServiceImpl) GetDataset(ctx context.Context, spaceID, id int64) (*DatasetWithSchema, error) {
 	return s.GetDatasetWithOpt(ctx, spaceID, id, &GetOpt{})
 }
+
 func (s *DatasetServiceImpl) BatchGetDataset(ctx context.Context, spaceID int64, ids []int64) ([]*DatasetWithSchema, error) {
 	return s.BatchGetDatasetWithOpt(ctx, spaceID, ids, &GetOpt{})
 }

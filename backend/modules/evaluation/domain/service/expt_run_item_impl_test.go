@@ -13,17 +13,16 @@ import (
 	"github.com/stretchr/testify/assert"
 	"go.uber.org/mock/gomock"
 
-	benefitmocks "github.com/coze-dev/cozeloop/backend/infra/external/benefit/mocks"
-	metricsmocks "github.com/coze-dev/cozeloop/backend/modules/evaluation/domain/component/metrics/mocks"
-	configermocks "github.com/coze-dev/cozeloop/backend/modules/evaluation/domain/component/mocks"
-	repomocks "github.com/coze-dev/cozeloop/backend/modules/evaluation/domain/repo/mocks"
-	servicemocks "github.com/coze-dev/cozeloop/backend/modules/evaluation/domain/service/mocks"
-
 	"github.com/coze-dev/cozeloop/backend/infra/external/benefit"
+	benefitmocks "github.com/coze-dev/cozeloop/backend/infra/external/benefit/mocks"
 	"github.com/coze-dev/cozeloop/backend/modules/evaluation/domain/component"
 	"github.com/coze-dev/cozeloop/backend/modules/evaluation/domain/component/metrics"
+	metricsmocks "github.com/coze-dev/cozeloop/backend/modules/evaluation/domain/component/metrics/mocks"
+	configermocks "github.com/coze-dev/cozeloop/backend/modules/evaluation/domain/component/mocks"
 	"github.com/coze-dev/cozeloop/backend/modules/evaluation/domain/entity"
 	"github.com/coze-dev/cozeloop/backend/modules/evaluation/domain/repo"
+	repomocks "github.com/coze-dev/cozeloop/backend/modules/evaluation/domain/repo/mocks"
+	servicemocks "github.com/coze-dev/cozeloop/backend/modules/evaluation/domain/service/mocks"
 )
 
 func Test_NewExptItemEvaluation(t *testing.T) {
@@ -100,28 +99,6 @@ func Test_NewExptItemEvaluation(t *testing.T) {
 			assert.NotNil(t, inst)
 		})
 	}
-}
-
-// 用于测试 EvalTurns 返回错误的自定义类型
-type mockEvalTurnsExecutor struct {
-	*ExptItemEvalCtxExecutor
-	called *bool
-}
-
-func (m *mockEvalTurnsExecutor) Eval(ctx context.Context, eiec *entity.ExptItemEvalCtx) error {
-	*m.called = true
-	return errors.New("mock evalturns error")
-}
-
-// 用于测试 CompleteSetItemRun 返回错误的自定义类型
-type mockCompleteSetItemRunExecutor struct {
-	*ExptItemEvalCtxExecutor
-	called *bool
-}
-
-func (m *mockCompleteSetItemRunExecutor) CompleteSetItemRun(ctx context.Context, event *entity.ExptItemEvalEvent, evalErr error) error {
-	*m.called = true
-	return errors.New("mock completesetitemrun error")
 }
 
 func Test_ExptItemEvalCtxExecutor_Eval(t *testing.T) {

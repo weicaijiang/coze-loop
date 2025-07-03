@@ -4,11 +4,13 @@
 package eino
 
 import (
+	"context"
+
+	einoModel "github.com/cloudwego/eino/components/model"
+
 	"github.com/coze-dev/cozeloop/backend/modules/llm/domain/entity"
 	llm_errorx "github.com/coze-dev/cozeloop/backend/modules/llm/pkg/errno"
 	"github.com/coze-dev/cozeloop/backend/pkg/errorx"
-	"context"
-	einoModel "github.com/cloudwego/eino/components/model"
 )
 
 type LLM struct {
@@ -50,7 +52,8 @@ func (l *LLM) Generate(ctx context.Context, input []*entity.Message, opts ...ent
 }
 
 func (l *LLM) Stream(ctx context.Context, input []*entity.Message, opts ...entity.Option) (
-	entity.IStreamReader, error) {
+	entity.IStreamReader, error,
+) {
 	// 解析 option
 	optsDO := entity.ApplyOptions(nil, opts...)
 	einoOpts, err := entity.FromDOOptions(optsDO)

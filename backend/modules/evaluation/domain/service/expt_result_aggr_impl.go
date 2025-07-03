@@ -11,7 +11,6 @@ import (
 	"time"
 
 	"github.com/bytedance/gg/gptr"
-
 	"github.com/bytedance/gg/gslice"
 
 	"github.com/coze-dev/cozeloop/backend/modules/evaluation/domain/component/metrics"
@@ -279,7 +278,6 @@ func (e *ExptAggrResultServiceImpl) BatchGetExptAggrResultByExperimentIDs(ctx co
 	})
 	evaluatorVersionList, err := e.evaluatorService.BatchGetEvaluatorVersion(ctx, evaluatorVersionIDs, true)
 	// evaluators, err := e.evalCall.BatchGetEvaluatorVersion(ctx, spaceID, evaluatorVersionIDs, true)
-
 	if err != nil {
 		return nil, err
 	}

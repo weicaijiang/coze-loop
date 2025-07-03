@@ -10,13 +10,10 @@ import (
 	"path/filepath"
 	"time"
 
-	"github.com/pkg/errors"
-
-	"github.com/bytedance/gg/gptr"
-
-	"github.com/bytedance/gg/gslice"
-
 	"github.com/bytedance/gg/gmap"
+	"github.com/bytedance/gg/gptr"
+	"github.com/bytedance/gg/gslice"
+	"github.com/pkg/errors"
 
 	"github.com/coze-dev/cozeloop/backend/modules/data/domain/component/vfs"
 	"github.com/coze-dev/cozeloop/backend/modules/data/domain/dataset/entity"
@@ -371,7 +368,6 @@ func (h *importHandler) scanFileWithoutSave(ctx context.Context, w *importWorksp
 	if err := h.repo.UpdateIOJob(ctx, h.job.ID, delta); err != nil {
 		logs.CtxWarn(ctx, "update io_job failed, err=%v", err)
 	}
-	return
 }
 
 func (w *importWorkspace) nextFile(ctx context.Context) (lr *vfs.FileReader, ok bool, err error) {

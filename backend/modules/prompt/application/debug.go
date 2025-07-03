@@ -296,7 +296,7 @@ func (p *PromptDebugApplicationImpl) doDebugStreaming(ctx context.Context, req *
 			return nil, err
 		}
 	}
-	select {
+	select { //nolint:staticcheck
 	case err, ok = <-errChan:
 		if !ok {
 			logs.CtxInfo(ctx, "debug streaming finished")
@@ -339,7 +339,7 @@ func (p *PromptDebugApplicationImpl) saveDebugLog(ctx context.Context, param sav
 	if param.err != nil {
 		errCode = prompterr.CommonInternalErrorCode
 		bizErr, ok := errorx.FromStatusError(param.err)
-		if ok && bizErr != nil {
+		if ok {
 			errCode = bizErr.Code()
 		}
 	}

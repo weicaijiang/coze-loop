@@ -8,11 +8,9 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/jinzhu/copier"
-
-	"github.com/bytedance/gg/gslice"
-
 	"github.com/bytedance/gg/gptr"
+	"github.com/bytedance/gg/gslice"
+	"github.com/jinzhu/copier"
 
 	"github.com/coze-dev/cozeloop/backend/infra/external/audit"
 	"github.com/coze-dev/cozeloop/backend/infra/external/benefit"
@@ -40,7 +38,6 @@ type ExptItemEventEvalServiceImpl struct {
 	exptTurnResultRepo       repo.IExptTurnResultRepo
 	exptStatsRepo            repo.IExptStatsRepo
 	experimentRepo           repo.IExperimentRepo
-	exptRunLogRepo           repo.IExptRunLogRepo
 	configer                 component.IConfiger
 	quotaRepo                repo.QuotaRepo
 	mutex                    lock.ILocker

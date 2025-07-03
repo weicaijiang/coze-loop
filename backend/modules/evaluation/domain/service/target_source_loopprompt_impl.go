@@ -9,12 +9,10 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/coze-dev/cozeloop/backend/infra/middleware/session"
-
 	"github.com/bytedance/gg/gcond"
-
 	"github.com/bytedance/gg/gptr"
 
+	"github.com/coze-dev/cozeloop/backend/infra/middleware/session"
 	"github.com/coze-dev/cozeloop/backend/modules/evaluation/consts"
 	"github.com/coze-dev/cozeloop/backend/modules/evaluation/domain/component/rpc"
 	"github.com/coze-dev/cozeloop/backend/modules/evaluation/domain/entity"
@@ -41,7 +39,6 @@ func (t *PromptSourceEvalTargetServiceImpl) EvalType() entity.EvalTargetType {
 
 func (t *PromptSourceEvalTargetServiceImpl) ValidateInput(ctx context.Context, spaceID int64, inputSchema []*entity.ArgsSchema, input *entity.EvalTargetInputData) error {
 	return input.ValidateInputSchema(inputSchema)
-
 }
 
 func (t *PromptSourceEvalTargetServiceImpl) Execute(ctx context.Context, spaceID int64, param *entity.ExecuteEvalTargetParam) (evaluatorOutputData *entity.EvalTargetOutputData, status entity.EvalTargetRunStatus, err error) {
@@ -101,9 +98,7 @@ func (t *PromptSourceEvalTargetServiceImpl) Execute(ctx context.Context, spaceID
 		return evaluatorOutputData, entity.EvalTargetRunStatusFail, err
 	}
 
-	var (
-		outputStr string
-	)
+	var outputStr string
 
 	if executePromptResult == nil {
 		outputStr = ""

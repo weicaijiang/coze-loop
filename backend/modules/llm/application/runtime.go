@@ -10,15 +10,14 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/coze-dev/cozeloop/backend/infra/limiter"
-	"github.com/coze-dev/cozeloop/backend/kitex_gen/coze/loop/llm/domain/common"
-
 	"github.com/coze-dev/cozeloop-go"
 	"github.com/coze-dev/cozeloop-go/spec/tracespec"
 	"github.com/pkg/errors"
 
+	"github.com/coze-dev/cozeloop/backend/infra/limiter"
 	"github.com/coze-dev/cozeloop/backend/infra/looptracer"
 	"github.com/coze-dev/cozeloop/backend/infra/redis"
+	"github.com/coze-dev/cozeloop/backend/kitex_gen/coze/loop/llm/domain/common"
 	druntime "github.com/coze-dev/cozeloop/backend/kitex_gen/coze/loop/llm/domain/runtime"
 	"github.com/coze-dev/cozeloop/backend/kitex_gen/coze/loop/llm/runtime"
 	"github.com/coze-dev/cozeloop/backend/modules/llm/application/convertor"
@@ -45,7 +44,8 @@ func NewRuntimeApplication(
 	manageSrv service.IManage,
 	runtimeSrv service.IRuntime,
 	redis redis.Cmdable,
-	factory limiter.IRateLimiterFactory) runtime.LLMRuntimeService {
+	factory limiter.IRateLimiterFactory,
+) runtime.LLMRuntimeService {
 	return &runtimeApp{
 		manageSrv:   manageSrv,
 		runtimeSrv:  runtimeSrv,
@@ -179,12 +179,13 @@ func (r *runtimeApp) ChatStream(ctx context.Context, req *runtime.ChatRequest, s
 }
 
 func (r *runtimeApp) parseChatStreamResp(ctx context.Context, streamDO entity.IStreamReader, streamDTO runtime.LLMRuntimeService_ChatStreamServer,
-	beginTime time.Time) (parseResult entity.StreamRespParseResult, err error) {
+	beginTime time.Time,
+) (parseResult entity.StreamRespParseResult, err error) {
 	var hasReasoningContent bool
 	for {
 		msgDO, err := streamDO.Recv()
 		if int64(parseResult.FirstTokenLatency) <= int64(0) {
-			parseResult.FirstTokenLatency = time.Now().Sub(beginTime)
+			parseResult.FirstTokenLatency = time.Since(beginTime)
 		}
 		if err == io.EOF {
 			break

@@ -9,15 +9,14 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/bytedance/gg/gslice"
+
 	domain_expt "github.com/coze-dev/cozeloop/backend/kitex_gen/coze/loop/evaluation/domain/expt"
-	"github.com/coze-dev/cozeloop/backend/modules/evaluation/domain/service"
-
 	"github.com/coze-dev/cozeloop/backend/modules/evaluation/domain/entity"
-	"github.com/coze-dev/cozeloop/backend/pkg/logs"
-
+	"github.com/coze-dev/cozeloop/backend/modules/evaluation/domain/service"
 	"github.com/coze-dev/cozeloop/backend/pkg/errorx"
 	"github.com/coze-dev/cozeloop/backend/pkg/json"
-	"github.com/bytedance/gg/gslice"
+	"github.com/coze-dev/cozeloop/backend/pkg/logs"
 )
 
 func NewExptFilterConvertor(evalTargetService service.IEvalTargetService) *ExptFilterConvertor {
@@ -220,23 +219,6 @@ func parseStringList(str string) []string {
 	return strings.Split(str, ",")
 }
 
-func (e *ExptFilterConvertor) parseFilterField(field *domain_expt.FilterField) (string, error) {
-	switch field.GetFieldType() {
-	case domain_expt.FieldType_CreatorBy:
-		return "creator_by", nil
-	case domain_expt.FieldType_EvaluatorVersionID:
-		return "evaluator_version_id", nil
-	case domain_expt.FieldType_TargetVersionID:
-		return "target_id", nil
-	case domain_expt.FieldType_EvalSetVersionID:
-		return "eval_set_version_id", nil
-	case domain_expt.FieldType_ExptStatus:
-		return "expt_status", nil
-	default:
-		return "", fmt.Errorf("parseFilterField with unknown field type: %v", field.GetFieldType())
-	}
-}
-
 func parseOperator(operatorType domain_expt.FilterOperatorType) (string, error) {
 	var operator string
 	switch operatorType {
@@ -321,7 +303,6 @@ func ConvertExptTurnResultFilter(filters *domain_expt.Filters) (*entity.ExptTurn
 		TrunRunStateFilters: trunRunStateFilters,
 		ScoreFilters:        scoreFilters,
 	}, nil
-
 }
 
 func parseTurnRunState(filterCondition domain_expt.FilterCondition) ([]entity.TurnRunState, error) {

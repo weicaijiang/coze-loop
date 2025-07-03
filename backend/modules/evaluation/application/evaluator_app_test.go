@@ -15,9 +15,6 @@ import (
 	"github.com/stretchr/testify/assert"
 	"go.uber.org/mock/gomock"
 
-	confmocks "github.com/coze-dev/cozeloop/backend/modules/evaluation/pkg/conf/mocks"
-	"github.com/coze-dev/cozeloop/backend/pkg/lang/ptr"
-
 	"github.com/coze-dev/cozeloop/backend/infra/external/audit"
 	auditmocks "github.com/coze-dev/cozeloop/backend/infra/external/audit/mocks"
 	"github.com/coze-dev/cozeloop/backend/infra/external/benefit"
@@ -27,17 +24,17 @@ import (
 	evaluatordto "github.com/coze-dev/cozeloop/backend/kitex_gen/coze/loop/evaluation/domain/evaluator"
 	evaluatorservice "github.com/coze-dev/cozeloop/backend/kitex_gen/coze/loop/evaluation/evaluator"
 	"github.com/coze-dev/cozeloop/backend/modules/evaluation/application/convertor/evaluator"
-	evaluatorconvertor "github.com/coze-dev/cozeloop/backend/modules/evaluation/application/convertor/evaluator"
 	"github.com/coze-dev/cozeloop/backend/modules/evaluation/consts"
-	userinfomocks "github.com/coze-dev/cozeloop/backend/modules/evaluation/domain/component/userinfo/mocks"
-	"github.com/coze-dev/cozeloop/backend/modules/evaluation/domain/entity"
-	"github.com/coze-dev/cozeloop/backend/modules/evaluation/domain/service/mocks"
-	"github.com/coze-dev/cozeloop/backend/modules/evaluation/pkg/errno"
-	"github.com/coze-dev/cozeloop/backend/pkg/errorx"
-
 	metricsmock "github.com/coze-dev/cozeloop/backend/modules/evaluation/domain/component/metrics/mocks"
 	"github.com/coze-dev/cozeloop/backend/modules/evaluation/domain/component/rpc"
 	rpcmocks "github.com/coze-dev/cozeloop/backend/modules/evaluation/domain/component/rpc/mocks"
+	userinfomocks "github.com/coze-dev/cozeloop/backend/modules/evaluation/domain/component/userinfo/mocks"
+	"github.com/coze-dev/cozeloop/backend/modules/evaluation/domain/entity"
+	"github.com/coze-dev/cozeloop/backend/modules/evaluation/domain/service/mocks"
+	confmocks "github.com/coze-dev/cozeloop/backend/modules/evaluation/pkg/conf/mocks"
+	"github.com/coze-dev/cozeloop/backend/modules/evaluation/pkg/errno"
+	"github.com/coze-dev/cozeloop/backend/pkg/errorx"
+	"github.com/coze-dev/cozeloop/backend/pkg/lang/ptr"
 )
 
 func TestEvaluatorHandlerImpl_ListEvaluators(t *testing.T) {
@@ -440,7 +437,6 @@ func TestEvaluatorHandlerImpl_CreateEvaluator(t *testing.T) {
 				},
 			},
 			mockSetup: func() {
-
 				mockAuditClient.EXPECT().
 					Audit(gomock.Any(), gomock.Any()).
 					Return(audit.AuditRecord{AuditStatus: audit.AuditStatus_Rejected}, nil).Times(1)
@@ -1030,7 +1026,6 @@ func TestEvaluatorHandlerImpl_BatchGetEvaluatorVersions(t *testing.T) {
 				mockEvaluatorService.EXPECT().
 					BatchGetEvaluatorVersion(gomock.Any(), validEvaluatorVersionIDs, false).
 					Return([]*entity.Evaluator{}, nil)
-
 			},
 			wantResp: &evaluatorservice.BatchGetEvaluatorVersionsResponse{},
 			wantErr:  false,
@@ -1184,7 +1179,6 @@ func TestEvaluatorHandlerImpl_SubmitEvaluatorVersion(t *testing.T) {
 				Cid:         &validCID,
 			},
 			mockSetup: func() {
-
 				mockAuditClient.EXPECT().
 					Audit(gomock.Any(), gomock.Any()).
 					Return(audit.AuditRecord{AuditStatus: audit.AuditStatus_Rejected}, nil).
@@ -1204,7 +1198,6 @@ func TestEvaluatorHandlerImpl_SubmitEvaluatorVersion(t *testing.T) {
 
 			if tt.wantErr {
 				assert.Error(t, err)
-
 			} else {
 				assert.NoError(t, err)
 				assert.Equal(t, tt.wantResp.Evaluator.GetEvaluatorID(), resp.Evaluator.GetEvaluatorID())
@@ -1467,7 +1460,7 @@ func TestEvaluatorHandlerImpl_RunEvaluator(t *testing.T) {
 					Times(1)
 			},
 			wantResp: &evaluatorservice.RunEvaluatorResponse{
-				Record: evaluatorconvertor.ConvertEvaluatorRecordDO2DTO(validRecord),
+				Record: evaluator.ConvertEvaluatorRecordDO2DTO(validRecord),
 			},
 			wantErr: false,
 		},
@@ -1522,7 +1515,6 @@ func TestEvaluatorHandlerImpl_RunEvaluator(t *testing.T) {
 			resp, err := handler.RunEvaluator(context.Background(), tt.req)
 			if tt.wantErr {
 				assert.Error(t, err)
-
 			} else {
 				assert.NoError(t, err)
 				assert.Equal(t, tt.wantResp.Record.ID, resp.Record.ID)
@@ -1606,7 +1598,7 @@ func TestEvaluatorHandlerImpl_DebugEvaluator(t *testing.T) {
 				// Mock 调试服务
 				mockEvaluatorService.EXPECT().
 					DebugEvaluator(gomock.Any(), gomock.Any(), gomock.Any()).
-					Return(evaluatorconvertor.ConvertEvaluatorOutputDataDTO2DO(validOutputData), nil)
+					Return(evaluator.ConvertEvaluatorOutputDataDTO2DO(validOutputData), nil)
 			},
 			wantResp: &evaluatorservice.DebugEvaluatorResponse{
 				EvaluatorOutputData: validOutputData,
@@ -1681,7 +1673,6 @@ func TestEvaluatorHandlerImpl_DebugEvaluator(t *testing.T) {
 
 			if tt.wantErr {
 				assert.Error(t, err)
-
 			} else {
 				assert.NoError(t, err)
 				assert.Equal(t, tt.wantResp.EvaluatorOutputData.EvaluatorResult_.Reasoning, resp.EvaluatorOutputData.EvaluatorResult_.Reasoning)
@@ -1786,7 +1777,7 @@ func TestEvaluatorHandlerImpl_UpdateEvaluatorRecord(t *testing.T) {
 					Return(nil)
 			},
 			wantResp: &evaluatorservice.UpdateEvaluatorRecordResponse{
-				Record: evaluatorconvertor.ConvertEvaluatorRecordDO2DTO(validRecord),
+				Record: evaluator.ConvertEvaluatorRecordDO2DTO(validRecord),
 			},
 			wantErr: false,
 		},
@@ -2019,7 +2010,7 @@ func TestEvaluatorHandlerImpl_GetEvaluatorRecord(t *testing.T) {
 					Return()
 			},
 			wantResp: &evaluatorservice.GetEvaluatorRecordResponse{
-				Record: evaluatorconvertor.ConvertEvaluatorRecordDO2DTO(validRecord),
+				Record: evaluator.ConvertEvaluatorRecordDO2DTO(validRecord),
 			},
 			wantErr: false,
 		},
@@ -2159,8 +2150,8 @@ func TestEvaluatorHandlerImpl_BatchGetEvaluatorRecords(t *testing.T) {
 			},
 			wantResp: &evaluatorservice.BatchGetEvaluatorRecordsResponse{
 				Records: []*evaluatordto.EvaluatorRecord{
-					evaluatorconvertor.ConvertEvaluatorRecordDO2DTO(validRecords[0]),
-					evaluatorconvertor.ConvertEvaluatorRecordDO2DTO(validRecords[1]),
+					evaluator.ConvertEvaluatorRecordDO2DTO(validRecords[0]),
+					evaluator.ConvertEvaluatorRecordDO2DTO(validRecords[1]),
 				},
 			},
 			wantErr: false,
@@ -2410,7 +2401,6 @@ func TestEvaluatorHandlerImpl_CheckEvaluatorName(t *testing.T) {
 
 			if tt.wantErr {
 				assert.Error(t, err)
-
 			} else {
 				assert.NoError(t, err)
 				assert.Equal(t, tt.wantResp.Pass, resp.Pass)

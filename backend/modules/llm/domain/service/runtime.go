@@ -4,19 +4,19 @@
 package service
 
 import (
-	"github.com/coze-dev/cozeloop/backend/modules/llm/domain/component/conf"
-	"github.com/coze-dev/cozeloop/backend/modules/llm/pkg/httputil"
-	"github.com/coze-dev/cozeloop/backend/pkg/localos"
 	"context"
 	"fmt"
 
 	"github.com/coze-dev/cozeloop/backend/infra/idgen"
+	"github.com/coze-dev/cozeloop/backend/modules/llm/domain/component/conf"
 	"github.com/coze-dev/cozeloop/backend/modules/llm/domain/entity"
 	"github.com/coze-dev/cozeloop/backend/modules/llm/domain/repo"
 	"github.com/coze-dev/cozeloop/backend/modules/llm/domain/service/llmfactory"
 	"github.com/coze-dev/cozeloop/backend/modules/llm/domain/service/llminterface"
 	llm_errorx "github.com/coze-dev/cozeloop/backend/modules/llm/pkg/errno"
+	"github.com/coze-dev/cozeloop/backend/modules/llm/pkg/httputil"
 	"github.com/coze-dev/cozeloop/backend/pkg/errorx"
+	"github.com/coze-dev/cozeloop/backend/pkg/localos"
 )
 
 //go:generate mockgen -destination=mocks/runtime.go -package=mocks . IRuntime
@@ -55,7 +55,8 @@ func (r *RuntimeImpl) Generate(ctx context.Context, model *entity.Model, input [
 }
 
 func (r *RuntimeImpl) Stream(ctx context.Context, model *entity.Model, input []*entity.Message, opts ...entity.Option) (
-	entity.IStreamReader, error) {
+	entity.IStreamReader, error,
+) {
 	if err := r.ValidModelAndRequest(ctx, model, input, opts...); err != nil {
 		return nil, err
 	}

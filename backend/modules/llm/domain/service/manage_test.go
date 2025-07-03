@@ -4,18 +4,20 @@
 package service
 
 import (
+	"context"
+	"testing"
+
+	"github.com/pkg/errors"
+	"github.com/stretchr/testify/assert"
+	"go.uber.org/mock/gomock"
+	"gorm.io/gorm"
+
 	"github.com/coze-dev/cozeloop/backend/modules/llm/domain/component/conf"
 	llmconfmocks "github.com/coze-dev/cozeloop/backend/modules/llm/domain/component/conf/mocks"
 	"github.com/coze-dev/cozeloop/backend/modules/llm/domain/entity"
 	llm_errorx "github.com/coze-dev/cozeloop/backend/modules/llm/pkg/errno"
 	"github.com/coze-dev/cozeloop/backend/pkg/errorx"
 	"github.com/coze-dev/cozeloop/backend/pkg/unittest"
-	"context"
-	"github.com/pkg/errors"
-	"github.com/stretchr/testify/assert"
-	"go.uber.org/mock/gomock"
-	"gorm.io/gorm"
-	"testing"
 )
 
 func TestManageImpl_GetModelByID(t *testing.T) {
@@ -119,7 +121,7 @@ func TestManageImpl_ListModels(t *testing.T) {
 			fieldsGetter: func(ctrl *gomock.Controller) fields {
 				confMock := llmconfmocks.NewMockIConfigManage(ctrl)
 				models := []*entity.Model{
-					&entity.Model{ID: 1},
+					{ID: 1},
 				}
 				confMock.EXPECT().ListModels(gomock.Any(), gomock.Any()).Return(models, int64(2), true, int64(1), nil)
 				return fields{conf: confMock}

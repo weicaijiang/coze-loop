@@ -11,24 +11,22 @@ import (
 	"testing"
 	"time"
 
+	"github.com/stretchr/testify/assert"
+	"go.uber.org/mock/gomock"
+
+	auditmocks "github.com/coze-dev/cozeloop/backend/infra/external/audit/mocks"
+	idgenmocks "github.com/coze-dev/cozeloop/backend/infra/idgen/mocks"
+	lockmocks "github.com/coze-dev/cozeloop/backend/infra/lock/mocks"
 	"github.com/coze-dev/cozeloop/backend/infra/middleware/session"
 	idemmocks "github.com/coze-dev/cozeloop/backend/modules/evaluation/domain/component/idem/mocks"
 	metricsmocks "github.com/coze-dev/cozeloop/backend/modules/evaluation/domain/component/metrics/mocks"
 	configmocks "github.com/coze-dev/cozeloop/backend/modules/evaluation/domain/component/mocks"
 	"github.com/coze-dev/cozeloop/backend/modules/evaluation/domain/entity"
 	entitymocks "github.com/coze-dev/cozeloop/backend/modules/evaluation/domain/entity/mocks"
-	"github.com/coze-dev/cozeloop/backend/pkg/lang/ptr"
-
-	idgenmocks "github.com/coze-dev/cozeloop/backend/infra/idgen/mocks"
-	lockmocks "github.com/coze-dev/cozeloop/backend/infra/lock/mocks"
 	eventmocks "github.com/coze-dev/cozeloop/backend/modules/evaluation/domain/events/mocks"
 	mock_repo "github.com/coze-dev/cozeloop/backend/modules/evaluation/domain/repo/mocks"
 	svcmocks "github.com/coze-dev/cozeloop/backend/modules/evaluation/domain/service/mocks"
-
-	"github.com/stretchr/testify/assert"
-	"go.uber.org/mock/gomock"
-
-	auditmocks "github.com/coze-dev/cozeloop/backend/infra/external/audit/mocks"
+	"github.com/coze-dev/cozeloop/backend/pkg/lang/ptr"
 )
 
 func TestExptSchedulerImpl_Schedule(t *testing.T) {
@@ -60,7 +58,8 @@ func TestExptSchedulerImpl_Schedule(t *testing.T) {
 		EvalSet: &entity.EvaluationSet{
 			ID: 1, SpaceID: 3, Name: "name", Description: "description", Status: 0, Spec: nil, Features: nil, ItemCount: 0, ChangeUncommitted: false,
 			EvaluationSetVersion: &entity.EvaluationSetVersion{ID: 1, AppID: 0, SpaceID: 3, EvaluationSetID: 1, Version: "version", VersionNum: 0, Description: "description", EvaluationSetSchema: nil, ItemCount: 0, BaseInfo: nil},
-			LatestVersion:        "", NextVersionNum: 0, BaseInfo: nil, BizCategory: strconv.Itoa(1)},
+			LatestVersion:        "", NextVersionNum: 0, BaseInfo: nil, BizCategory: strconv.Itoa(1),
+		},
 		Evaluators:      []*entity.Evaluator{{}},
 		Status:          0,
 		StatusMessage:   "",
@@ -762,7 +761,6 @@ func TestExptSchedulerImpl_HandleEventCheck(t *testing.T) {
 			},
 			next: func(ctx context.Context, event *entity.ExptScheduleEvent) error { return nil },
 			preparemock: func() {
-				//configer.EXPECT().GetExptExecConf(gomock.Any(), gomock.Any()).Return(&entity.ExptExecConf{ZombieIntervalSecond: int(10000)}).Times(1)
 				manager.EXPECT().GetRunLog(gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any()).Return(nil, errors.New("db error")).Times(1)
 			},
 			wantErr: true,
@@ -780,7 +778,6 @@ func TestExptSchedulerImpl_HandleEventCheck(t *testing.T) {
 				return errors.New("should not be called")
 			},
 			preparemock: func() {
-				//configer.EXPECT().GetExptExecConf(gomock.Any(), gomock.Any()).Return(&entity.ExptExecConf{ZombieIntervalSecond: int(10000)}).Times(1)
 				manager.EXPECT().GetRunLog(gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any()).Return(&entity.ExptRunLog{Status: int64(entity.ExptStatus_Success)}, nil).Times(1)
 			},
 			wantErr: false,

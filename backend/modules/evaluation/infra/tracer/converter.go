@@ -4,12 +4,10 @@
 package tracer
 
 import (
+	"github.com/bytedance/gg/gptr"
+	"github.com/bytedance/gg/gslice"
 	"github.com/bytedance/sonic"
 	"github.com/coze-dev/cozeloop-go/spec/tracespec"
-
-	"github.com/bytedance/gg/gslice"
-
-	"github.com/bytedance/gg/gptr"
 
 	commonentity "github.com/coze-dev/cozeloop/backend/modules/evaluation/domain/entity"
 	"github.com/coze-dev/cozeloop/backend/pkg/lang/maps"
@@ -82,6 +80,7 @@ func ConvertMsg2Ob(msg *commonentity.Message) (obMsg *tracespec.ModelMessage) {
 
 	return obMsg
 }
+
 func ConvertContent2Ob(content *commonentity.Content) *tracespec.ModelMessagePart {
 	var contentType string
 	switch gptr.Indirect(content.ContentType) {

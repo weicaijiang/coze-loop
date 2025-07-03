@@ -4,21 +4,23 @@
 package eino
 
 import (
+	"context"
+	"testing"
+
+	"github.com/cloudwego/eino/schema"
+	"github.com/stretchr/testify/assert"
+	"go.uber.org/mock/gomock"
+
 	"github.com/coze-dev/cozeloop/backend/modules/llm/domain/entity"
 	"github.com/coze-dev/cozeloop/backend/modules/llm/domain/service/llmimpl/eino/mocks"
 	"github.com/coze-dev/cozeloop/backend/pkg/lang/ptr"
 	"github.com/coze-dev/cozeloop/backend/pkg/unittest"
-	"context"
-	"github.com/cloudwego/eino/schema"
-	"github.com/stretchr/testify/assert"
-	"go.uber.org/mock/gomock"
-	"testing"
 )
 
 func TestLLM_Generate(t *testing.T) {
 	var opts []entity.Option
 	opts = append(opts, entity.WithTools([]*entity.ToolInfo{
-		&entity.ToolInfo{
+		{
 			Name:        "get_weather",
 			Desc:        "Determine weather in my location",
 			ToolDefType: entity.ToolDefTypeOpenAPIV3,
@@ -27,20 +29,20 @@ func TestLLM_Generate(t *testing.T) {
 	}), entity.WithModel("your model"), entity.WithStop([]string{"stop"}),
 		entity.WithMaxTokens(1000), entity.WithTemperature(1.0), entity.WithTopP(0.7), entity.WithToolChoice(ptr.Of(entity.ToolChoiceAuto)))
 	textInput := []*entity.Message{
-		&entity.Message{
+		{
 			Role:    entity.RoleUser,
 			Content: "there are questions",
 		},
 	}
 	multimodalInput := []*entity.Message{
-		&entity.Message{
+		{
 			Role: entity.RoleUser,
 			MultiModalContent: []*entity.ChatMessagePart{
-				&entity.ChatMessagePart{
+				{
 					Type: entity.ChatMessagePartTypeText,
 					Text: "there is text",
 				},
-				&entity.ChatMessagePart{
+				{
 					Type: entity.ChatMessagePartTypeImageURL,
 					ImageURL: &entity.ChatMessageImageURL{
 						URL:      "there is url",
@@ -120,11 +122,11 @@ func TestLLM_Generate(t *testing.T) {
 				cm.EXPECT().Generate(gomock.Any(), gomock.Any(), gomock.Any()).Return(&schema.Message{
 					Role: schema.Assistant,
 					MultiContent: []schema.ChatMessagePart{
-						schema.ChatMessagePart{
+						{
 							Type: schema.ChatMessagePartTypeText,
 							Text: "there is text",
 						},
-						schema.ChatMessagePart{
+						{
 							Type: schema.ChatMessagePartTypeImageURL,
 							ImageURL: &schema.ChatMessageImageURL{
 								URL:      "there is url",
@@ -156,11 +158,11 @@ func TestLLM_Generate(t *testing.T) {
 			want: &entity.Message{
 				Role: entity.RoleAssistant,
 				MultiModalContent: []*entity.ChatMessagePart{
-					&entity.ChatMessagePart{
+					{
 						Type: entity.ChatMessagePartTypeText,
 						Text: "there is text",
 					},
-					&entity.ChatMessagePart{
+					{
 						Type: entity.ChatMessagePartTypeImageURL,
 						ImageURL: &entity.ChatMessageImageURL{
 							URL:      "there is url",
@@ -210,7 +212,7 @@ func TestLLM_Generate(t *testing.T) {
 func TestLLM_Stream(t *testing.T) {
 	var opts []entity.Option
 	opts = append(opts, entity.WithTools([]*entity.ToolInfo{
-		&entity.ToolInfo{
+		{
 			Name:        "get_weather",
 			Desc:        "Determine weather in my location",
 			ToolDefType: entity.ToolDefTypeOpenAPIV3,
@@ -218,7 +220,7 @@ func TestLLM_Stream(t *testing.T) {
 		},
 	}))
 	textInput := []*entity.Message{
-		&entity.Message{
+		{
 			Role:    entity.RoleUser,
 			Content: "there are questions",
 		},

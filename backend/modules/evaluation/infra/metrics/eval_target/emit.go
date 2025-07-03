@@ -8,9 +8,8 @@ import (
 	"sync"
 	"time"
 
-	eval_metrics "github.com/coze-dev/cozeloop/backend/modules/evaluation/domain/component/metrics"
-
 	"github.com/coze-dev/cozeloop/backend/infra/metrics"
+	eval_metrics "github.com/coze-dev/cozeloop/backend/modules/evaluation/domain/component/metrics"
 )
 
 const (
@@ -70,7 +69,7 @@ func (e *EvalTargetMetricsImpl) EmitRun(spaceID int64, err error, start time.Tim
 		{Name: tagIsErr, Value: strconv.FormatInt(isError, 10)},
 		{Name: tagCode, Value: strconv.FormatInt(code, 10)},
 	}, metrics.Counter(1, metrics.WithSuffix(runSuffix+throughputSuffix)),
-		metrics.Timer(int64(time.Now().Sub(start).Seconds()), metrics.WithSuffix(runSuffix+latencySuffix)))
+		metrics.Timer(int64(time.Since(start).Seconds()), metrics.WithSuffix(runSuffix+latencySuffix)))
 }
 
 func (e *EvalTargetMetricsImpl) EmitCreate(spaceID int64, err error) {

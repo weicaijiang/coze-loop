@@ -8,12 +8,13 @@ import (
 	"fmt"
 	"testing"
 
+	"github.com/stretchr/testify/assert"
+	"go.uber.org/mock/gomock"
+
 	"github.com/coze-dev/cozeloop/backend/modules/observability/domain/component/config"
 	confmocks "github.com/coze-dev/cozeloop/backend/modules/observability/domain/component/config/mocks"
 	"github.com/coze-dev/cozeloop/backend/modules/observability/domain/trace/entity/loop_span"
 	"github.com/coze-dev/cozeloop/backend/pkg/lang/ptr"
-	"github.com/stretchr/testify/assert"
-	"go.uber.org/mock/gomock"
 )
 
 func TestPlatformProcessor_Transform(t *testing.T) {
@@ -82,7 +83,8 @@ func TestPlatformProcessor_Transform(t *testing.T) {
 					{
 						TraceID: "1234",
 						SpanID:  "4567",
-					}},
+					},
+				},
 			},
 			want: loop_span.SpanList{{
 				TraceID: "1234",
@@ -136,7 +138,8 @@ func TestPlatformProcessor_Transform(t *testing.T) {
 						},
 						Input:  `{"input1": 1, "input2": 2}`,
 						Output: `{"output1": 1, "output2": 2}`,
-					}},
+					},
+				},
 			},
 			want: loop_span.SpanList{{
 				TraceID: "1234",

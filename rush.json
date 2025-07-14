@@ -63,21 +63,6 @@
       "tags": ["team-arch", "level-1"]
     },
     {
-      "packageName": "@coze-arch/i18n",
-      "projectFolder": "frontend/packages/arch/i18n",
-      "tags": ["team-arch", "level-1", "rush-tools"]
-    },
-    {
-      "packageName": "@coze-studio/studio-i18n-resource-adapter",
-      "projectFolder": "frontend/packages/arch/resources/studio-i18n-resource",
-      "tags": ["team-arch", "level-1"]
-    },
-    {
-      "packageName": "@coze-studio/loop-i18n-resource-adapter",
-      "projectFolder": "frontend/packages/arch/resources/loop-i18n-resource",
-      "tags": ["team-arch", "level-1"]
-    },
-    {
       "packageName": "@coze-arch/rush-logger",
       "projectFolder": "frontend/infra/utils/rush-logger",
       "tags": ["team-arch", "level-1"]
@@ -311,6 +296,16 @@
       "packageName": "@coze-arch/bot-md-box-adapter",
       "projectFolder": "frontend/packages/arch/bot-md-box-adapter",
       "tags": ["level-2"]
+    },
+    {
+      "packageName": "@cozeloop/loop-lng",
+      "projectFolder": "frontend/packages/cozeloop/resources/loop-lng",
+      "tags": ["level-3"]
+    },
+    {
+      "packageName": "@cozeloop/intl",
+      "projectFolder": "frontend/packages/cozeloop/intl",
+      "tags": ["level-3"]
     }
   ]
 }

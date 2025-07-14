@@ -1,7 +1,7 @@
 {
-  "extends": "@coze-arch/ts-config/tsconfig.web.json",
+  "extends": "@coze-arch/ts-config/tsconfig.node.json",
   "$schema": "https://json.schemastore.org/tsconfig",
-  "include": ["__tests__", "vitest.config.mts", "scripts"],
+  "include": ["__tests__", "vitest.config.ts"],
   "exclude": ["./dist"],
   "references": [
     {
@@ -11,9 +11,9 @@
   "compilerOptions": {
     "jsx": "preserve",
     "rootDir": "./",
+    "resolveJsonModule": true,
     "outDir": "./dist",
-    "useUnknownInCatchVariables": false,
-    "types": ["vitest/globals"],
-    "strictNullChecks": true
+    "types": ["vitest/globals", "node"],
+    "useUnknownInCatchVariables": false
   }
 }

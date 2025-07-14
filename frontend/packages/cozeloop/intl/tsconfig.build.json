@@ -12,12 +12,6 @@
   "include": ["./src", "./src/resource/**/*.json", "./src/override/**/*.json"],
   "references": [
     {
-      "path": "../intl/tsconfig.build.json"
-    },
-    {
-      "path": "../resources/loop-lng/tsconfig.build.json"
-    },
-    {
       "path": "../../../config/eslint-config/tsconfig.build.json"
     },
     {

@@ -3,6 +3,7 @@
 import { type ReactNode, useState } from 'react';
 
 import cls from 'classnames';
+import { I18n } from '@cozeloop/i18n-adapter';
 import {
   IconCozDocument,
   IconCozArrowDown,
@@ -15,8 +16,10 @@ import {
   COZELOOP_DOC_URL,
   COZELOOP_LARK_GROUP_URL,
   COZELOOP_GITHUB_URL,
+  COZELOOP_DISCORD_URL,
 } from '@/constants';
 import { ReactComponent as IconGithub } from '@/assets/images/github.svg';
+import { ReactComponent as IconDiscord } from '@/assets/images/discord.svg';
 
 import { ItemWithLink } from './item-with-link';
 
@@ -37,13 +40,13 @@ export function FooterMenus({ isCollapsed, isHovered }: Props) {
   const [isShow, setIsShow] = useState(true);
   const menuItems: MenuItem[] = [
     {
-      text: '文档',
+      text: I18n.t('document'),
       key: 'actions/doc',
       icon: <IconCozDocument className="coz-fg-secondary" />,
       onClick: () => window.open(COZELOOP_DOC_URL),
     },
     {
-      text: '飞书群',
+      text: I18n.t('lark_group'),
       key: 'actions/lark',
       icon: <IconCozLarkFill className="coz-fg-secondary" />,
       onClick: () => window.open(COZELOOP_LARK_GROUP_URL),
@@ -53,6 +56,12 @@ export function FooterMenus({ isCollapsed, isHovered }: Props) {
       key: 'actions/github',
       icon: <IconGithub className="w-[14px] h-[14px]" />,
       onClick: () => window.open(COZELOOP_GITHUB_URL),
+    },
+    {
+      text: 'Discord',
+      key: 'actions/discord',
+      icon: <IconDiscord className="w-[14px] h-[14px]" />,
+      onClick: () => window.open(COZELOOP_DISCORD_URL),
     },
   ];
 

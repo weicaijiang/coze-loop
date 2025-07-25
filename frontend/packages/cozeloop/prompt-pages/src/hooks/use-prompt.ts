@@ -11,6 +11,7 @@ import { useShallow } from 'zustand/react/shallow';
 import { nanoid } from 'nanoid';
 import { isEqual } from 'lodash-es';
 import { useRequest } from 'ahooks';
+import { I18n } from '@cozeloop/i18n-adapter';
 import { useSpace } from '@cozeloop/biz-hooks-adapter';
 import { TemplateType } from '@cozeloop/api-schema/prompt';
 import { promptDebug, promptManage } from '@cozeloop/api-schema';
@@ -26,12 +27,12 @@ import { useBasicStore } from '@/store/use-basic-store';
 
 interface UsePromptProps {
   promptID?: string;
-  regiesterSub?: boolean;
+  registerSub?: boolean;
 }
 
 export const usePrompt = ({
   promptID,
-  regiesterSub = false,
+  registerSub = false,
 }: UsePromptProps) => {
   const { spaceID } = useSpace();
 
@@ -106,6 +107,20 @@ export const usePrompt = ({
             if (onlyGetData) {
               return res;
             }
+            setPromptInfo(res.prompt);
+            const currentPromptDetail =
+              res.prompt?.prompt_draft || res.prompt?.prompt_commit;
+
+            const messageList =
+              currentPromptDetail?.detail?.prompt_template?.messages || [];
+            setMessageList(
+              messageList.map(item => ({ ...item, key: nanoid() })),
+            );
+
+            setModelConfig(currentPromptDetail?.detail?.model_config);
+            setToolCallConfig(currentPromptDetail?.detail?.tool_call_config);
+            setTools(currentPromptDetail?.detail?.tools);
+            setReadonly(Boolean(version));
 
             if (res.prompt) {
               const mockRes = await getMockData();
@@ -129,21 +144,6 @@ export const usePrompt = ({
               setUserDebugConfig(userDebugConfig);
               setCompareConfig(mockRes.debug_context?.compare_config);
             }
-
-            setPromptInfo(res.prompt);
-            const currentPromptDetail =
-              res.prompt?.prompt_draft || res.prompt?.prompt_commit;
-
-            const messageList =
-              currentPromptDetail?.detail?.prompt_template?.messages || [];
-            setMessageList(
-              messageList.map(item => ({ ...item, key: nanoid() })),
-            );
-
-            setModelConfig(currentPromptDetail?.detail?.model_config);
-            setToolCallConfig(currentPromptDetail?.detail?.tool_call_config);
-            setTools(currentPromptDetail?.detail?.tools);
-            setReadonly(Boolean(version));
 
             setTimeout(() => {
               setSaveLock(false);
@@ -231,7 +231,7 @@ export const usePrompt = ({
   useEffect(() => {
     let dataSub: () => void;
     let mockSub: () => void;
-    if (regiesterSub && promptID) {
+    if (registerSub && promptID) {
       dataSub = usePromptStore.subscribe(
         state => ({
           toolCallConfig: state.toolCallConfig,
@@ -248,7 +248,7 @@ export const usePrompt = ({
             runSavePrompt({ ...val, promptInfo: currentPromptInfo });
           }
           if (currentPromptInfo?.id && currentPromptInfo.id !== promptID) {
-            console.error('promptID 不一致');
+            console.error(I18n.t('prompt_id_inconsistent'));
           }
         },
         {
@@ -290,7 +290,7 @@ export const usePrompt = ({
       dataSub?.();
       mockSub?.();
     };
-  }, [regiesterSub, promptID]);
+  }, [registerSub, promptID]);
 
   useEffect(() => {
     setAutoSaving(savePromptLoading || mockLoading);

@@ -40,6 +40,11 @@ export class IntlClient {
   t(key: string, defaultValue?: string): string;
   t(
     key: string,
+    interpolation?: Record<string, unknown>,
+    defaultValue?: string,
+  ): string;
+  t(
+    key: string,
     interpolationOrDefaultValue?: Record<string, unknown> | string,
     defaultValue?: string,
   ): string {
@@ -49,6 +54,7 @@ export class IntlClient {
     return i18next.t(key, { ...interpolationOrDefaultValue, defaultValue });
   }
 
+  /** i18n unsafely, **TRUST THE KEY :)** */
   unsafeT(
     key: string,
     interpolation?: Record<string, unknown>,

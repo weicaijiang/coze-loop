@@ -3,6 +3,7 @@
 /* eslint-disable complexity */
 import { useMemo } from 'react';
 
+import { I18n } from '@cozeloop/i18n-adapter';
 import { InputSlider } from '@cozeloop/components';
 import { type ParamSchema, type Model } from '@cozeloop/api-schema/llm-manage';
 import { IconCozQuestionMarkCircle } from '@coze-arch/coze-design/icons';
@@ -14,7 +15,7 @@ import {
   withField,
 } from '@coze-arch/coze-design';
 
-import { DEFAULT_MAX_TOKENS, modelConfigLabelMap } from '@/consts';
+import { DEFAULT_MAX_TOKENS } from '@/consts';
 
 import { getDefaultModelConfig } from './utils';
 
@@ -41,9 +42,7 @@ export const getInputSliderConfig = (
     label: {
       text: (
         <Typography.Text>
-          {param?.label
-            ? param?.label
-            : modelConfigLabelMap[param?.name || ''] || ''}
+          {param?.label || I18n.unsafeT(param?.name || '')}
         </Typography.Text>
       ),
       extra: (
@@ -75,7 +74,7 @@ export function ModelConfigFormCommunity({
     <>
       {paramsFields.includes('max_tokens') ? (
         <FormInputSlider
-          label="最大回复长度"
+          label={I18n.t('max_tokens')}
           {...getInputSliderConfig('max_tokens', paramSchemas)}
           field="max_tokens"
           labelPosition="left"
@@ -83,7 +82,7 @@ export function ModelConfigFormCommunity({
       ) : null}
       {paramsFields.includes('temperature') ? (
         <FormInputSlider
-          label="生成随机性"
+          label={I18n.t('temperature')}
           {...getInputSliderConfig('temperature', paramSchemas)}
           field="temperature"
           labelPosition="left"
@@ -93,7 +92,7 @@ export function ModelConfigFormCommunity({
       ) : null}
       {paramsFields.includes('top_p') ? (
         <FormInputSlider
-          label="Top P"
+          label={I18n.t('top_p')}
           {...getInputSliderConfig('top_p', paramSchemas)}
           field="top_p"
           labelPosition="left"
@@ -102,7 +101,7 @@ export function ModelConfigFormCommunity({
       ) : null}
       {paramsFields.includes('top_k') ? (
         <FormInputSlider
-          label="Top K"
+          label={I18n.t('top_k')}
           {...getInputSliderConfig('top_k', paramSchemas)}
           field="top_k"
           labelPosition="left"
@@ -111,7 +110,7 @@ export function ModelConfigFormCommunity({
       ) : null}
       {paramsFields.includes('frequency_penalty') ? (
         <FormInputSlider
-          label="Frequency Penalty"
+          label={I18n.t('frequency_penalty')}
           {...getInputSliderConfig('frequency_penalty', paramSchemas)}
           field="frequency_penalty"
           labelPosition="left"
@@ -120,7 +119,7 @@ export function ModelConfigFormCommunity({
       ) : null}
       {paramsFields.includes('presence_penalty') ? (
         <FormInputSlider
-          label="Presence Penalty"
+          label={I18n.t('presence_penalty')}
           {...getInputSliderConfig('presence_penalty', paramSchemas)}
           field="presence_penalty"
           labelPosition="left"
@@ -130,7 +129,7 @@ export function ModelConfigFormCommunity({
       {paramsFields.includes('json_mode') ? (
         <Form.Switch
           label="JSON Mode"
-          {...getInputSliderConfig('top_p', paramSchemas)}
+          {...getInputSliderConfig('json_mode', paramSchemas)}
           labelPosition="left"
           field="json_mode"
         />

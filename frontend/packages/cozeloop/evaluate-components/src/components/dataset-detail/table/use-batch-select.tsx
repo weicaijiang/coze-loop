@@ -3,6 +3,7 @@
 import { useState } from 'react';
 
 import { sendEvent, EVENT_NAMES } from '@cozeloop/tea-adapter';
+import { I18n } from '@cozeloop/i18n-adapter';
 import { Guard, GuardPoint } from '@cozeloop/guard';
 import { useSpace } from '@cozeloop/biz-hooks-adapter';
 import {
@@ -91,16 +92,18 @@ export const useBatchSelect = ({
         sendEvent(EVENT_NAMES.cozeloop_dataset_batch_action);
       }}
     >
-      批量选择
+      {I18n.t('batch_select')}
     </Button>
   );
 
   const handleDelete = () => {
     Modal.confirm({
-      title: '删除数据项',
-      content: `确认删除已选的${batchSelectItems.size}数据项？此操作不可逆`,
-      okText: '删除',
-      cancelText: '取消',
+      title: I18n.t('delete_data_item'),
+      content: I18n.t('confirm_to_delete_selected_data_item', {
+        num: batchSelectItems.size,
+      }),
+      okText: I18n.t('delete'),
+      cancelText: I18n.t('Cancel'),
       okButtonProps: {
         color: 'red',
       },
@@ -120,11 +123,13 @@ export const useBatchSelect = ({
   const BatchSelectHeader = (
     <div className="flex items-center justify-end gap-2">
       <Typography.Text size="small">
-        已选
-        <Typography.Text size="small" className="mx-[2px]  font-medium">
-          {batchSelectItems.size}
-        </Typography.Text>
-        条数据
+        {I18n.t('x_data_item_selected', {
+          num: (
+            <Typography.Text size="small" className="mx-[2px]  font-medium">
+              {batchSelectItems.size}
+            </Typography.Text>
+          ),
+        })}
       </Typography.Text>
       <Typography.Text
         link
@@ -133,7 +138,7 @@ export const useBatchSelect = ({
           setBatchSelectedItems(new Set());
         }}
       >
-        取消选择
+        {I18n.t('unselect')}
       </Typography.Text>
       <Guard point={GuardPoint['eval.dataset.batch_delete']}>
         <Button
@@ -141,7 +146,7 @@ export const useBatchSelect = ({
           disabled={batchSelectItems.size === 0}
           onClick={handleDelete}
         >
-          删除
+          {I18n.t('delete')}
         </Button>
       </Guard>
     </div>

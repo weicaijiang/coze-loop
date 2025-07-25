@@ -5,7 +5,13 @@ import { useEffect, useRef, useState } from 'react';
 import { I18n } from '@cozeloop/i18n-adapter';
 import { DurationDay } from '@cozeloop/api-schema/foundation';
 import { IconCozInfoCircle } from '@coze-arch/coze-design/icons';
-import { Form, type FormApi, Input, Modal, Tooltip } from '@coze-arch/coze-design';
+import {
+  Form,
+  Input,
+  Modal,
+  Tooltip,
+  type FormApi,
+} from '@coze-arch/coze-design';
 
 import { disabledDate, formatDate, getExpirationOptions } from './utils';
 
@@ -40,8 +46,7 @@ export function PatModal({
   const [duration, setDuration] = useState<PatInfo['duration']>();
   const dataOptionsList = getExpirationOptions();
   const isCreate = !value;
-  const modalTitle =
-    title || isCreate ? I18n.t('add_new_pat_1') : I18n.t('edit_pat_1');
+  const modalTitle = title || isCreate ? I18n.t('add_pat') : I18n.t('edit_pat');
 
   const onOk = async () => {
     const values = await formApi.current?.getValues();
@@ -75,22 +80,19 @@ export function PatModal({
         <Form.Input
           trigger={['blur', 'change']}
           field="name"
-          label={{
-            text: I18n.t('coze_api_list1'),
-            required: true,
-          }}
+          label={{ text: I18n.t('name'), required: true }}
           placeholder={'Input token name'}
           maxLength={20}
         />
         <Form.Slot
           label={{
-            text: I18n.t('expire_time_1'),
+            text: I18n.t('expiration_time'),
             required: true,
             extra: (
               <Tooltip
                 theme="dark"
                 trigger="hover"
-                content={I18n.t('expired_time_forbidden_1')}
+                content={I18n.t('expired_time_tip')}
               >
                 <div
                   className={
@@ -112,7 +114,9 @@ export function PatModal({
                 disabled={!isCreate}
                 optionList={dataOptionsList}
                 onChange={v => setDuration(v as PatInfo['duration'])}
-                placeholder={I18n.t('select_expired_time_1')}
+                placeholder={I18n.t('please_select', {
+                  field: I18n.t('expiration_time'),
+                })}
               />
               {duration === 'custom' ? (
                 <Form.DatePicker

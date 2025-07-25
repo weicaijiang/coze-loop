@@ -3,23 +3,24 @@
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 import { Suspense } from 'react';
 
-import { I18n } from '@cozeloop/i18n-adapter';
 import { PageLoading } from '@cozeloop/components';
-import { zh_CN } from '@coze-arch/coze-design/locales';
-import { CDLocaleProvider } from '@coze-arch/coze-design';
 
 import { routeConfig } from './routes';
+import { useSetupI18n } from './hooks';
+import { LocaleProvider } from './components';
 
 import './index.css';
 
 const router = createBrowserRouter(routeConfig);
 
 export function App() {
+  useSetupI18n();
+
   return (
     <Suspense fallback={<PageLoading />}>
-      <CDLocaleProvider locale={zh_CN} i18n={I18n}>
+      <LocaleProvider>
         <RouterProvider router={router} />
-      </CDLocaleProvider>
+      </LocaleProvider>
     </Suspense>
   );
 }

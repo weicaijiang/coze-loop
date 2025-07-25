@@ -3,6 +3,7 @@
 import { useEffect, useMemo } from 'react';
 
 import { isEmpty } from 'lodash-es';
+import { I18n } from '@cozeloop/i18n-adapter';
 import { EvalTargetType } from '@cozeloop/api-schema/evaluation';
 import { IconCozInfoCircle } from '@coze-arch/coze-design/icons';
 import { Form, Tooltip } from '@coze-arch/coze-design';
@@ -17,10 +18,12 @@ import { EvalTargetPromptDetail } from './eval-target-prompt-detail';
 
 const EvaluateTargetMappingFieldLabel = (
   <div className="inline-flex flex-row items-center">
-    {'字段映射'}
+    {I18n.t('field_mapping')}
     <Tooltip
       theme="dark"
-      content="评测集字段到评测对象字段的映射，用于评测对象准确获取输入。"
+      content={I18n.t(
+        'evaluation_set_field_to_evaluation_object_field_mapping',
+      )}
     >
       <IconCozInfoCircle className="ml-1 w-4 h-4 coz-fg-secondary" />
     </Tooltip>
@@ -127,11 +130,17 @@ const PluginEvalTargetForm = (props: PluginEvalTargetFormProps) => {
                   // 需要配置变量, 并且配置过字段映射
                   // 没有值, 或者为空对象
                   if (variableList?.length > 0 && isEmpty(value)) {
-                    return new Error('请配置字段映射');
+                    return new Error(
+                      I18n.t('please_configure', {
+                        field: I18n.t('field_mapping'),
+                      }),
+                    );
                   }
                   return true;
                 },
-                message: '请配置字段映射',
+                message: I18n.t('please_configure', {
+                  field: I18n.t('field_mapping'),
+                }),
               },
             ]}
             loading={loading}

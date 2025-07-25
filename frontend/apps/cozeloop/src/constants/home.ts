@@ -1,4 +1,4 @@
-// Copyright (c) 2025 Bytedance Ltd. and/or its affiliates
+// Copyright (c) 2025 coze-dev Authors
 // SPDX-License-Identifier: Apache-2.0
 /** login page */
 export const LOGIN_PATH = '/auth/login';
@@ -14,7 +14,7 @@ export const COZELOOP_DOC_URL =
 export const COZELOOP_GITHUB_URL = 'https://github.com/coze-dev/cozeloop';
 
 /** discord url */
-export const COZELOOP_DISCORD_URL = 'https://discord.gg/x8kbtMwrJ2';
+export const COZELOOP_DISCORD_URL = 'https://discord.gg/a6YtkysB';
 
 /** lark group url */
 export const COZELOOP_LARK_GROUP_URL =

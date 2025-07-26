@@ -104,7 +104,7 @@ def generate_go_code(biz_name: str, biz_code: int, common_errors: List[Dict], bi
 package {os.path.basename(os.path.dirname(output_path))}
 
 import (
-""" + '\t"github.com/coze-dev/cozeloop/backend/pkg/errorx/code"\n' + """
+""" + '\t"github.com/coze-dev/coze-loop/backend/pkg/errorx/code"\n' + """
 )
 
 """ + '\n'.join(constants) + """
@@ -135,7 +135,7 @@ def generate_biz_code(biz_name: str, biz_code: int, common_errors: List[Dict], o
 
     # Generate and output code
     project_dir = os.environ.get('PROJECT_DIR',
-                             os.path.join(os.environ['GOPATH'], 'src/github.com/coze-dev/cozeloop'))
+                             os.path.join(os.environ['GOPATH'], 'src/github.com/coze-dev/coze-loop'))
     if not output_dir:
         output_dir = os.path.join(project_dir, 'backend/modules', biz_name, 'pkg/errno')
     else:

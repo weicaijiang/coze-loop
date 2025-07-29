@@ -21,6 +21,7 @@ import (
 	auth2 "github.com/coze-dev/coze-loop/backend/modules/foundation/infra/auth"
 	"github.com/coze-dev/coze-loop/backend/modules/foundation/infra/repo"
 	"github.com/coze-dev/coze-loop/backend/modules/foundation/infra/repo/mysql"
+	"github.com/coze-dev/coze-loop/backend/pkg/conf"
 	"github.com/google/wire"
 )
 
@@ -54,13 +55,16 @@ func InitSpaceApplication(idgen2 idgen.IIDGenerator, db2 db.Provider) (space.Spa
 	return spaceService, nil
 }
 
-func InitUserApplication(idgen2 idgen.IIDGenerator, db2 db.Provider) (user.UserService, error) {
+func InitUserApplication(idgen2 idgen.IIDGenerator, db2 db.Provider, configFactory conf.IConfigLoaderFactory) (user.UserService, error) {
 	iUserDAO := mysql.NewUserDAOImpl(db2)
 	iSpaceDAO := mysql.NewSpaceDAOImpl(db2)
 	iSpaceUserDAO := mysql.NewSpaceUserDAOImpl(db2)
 	iUserRepo := repo.NewUserRepo(db2, idgen2, iUserDAO, iSpaceDAO, iSpaceUserDAO)
 	iUserService := service.NewUserService(db2, iUserRepo, idgen2)
-	userService := NewUserApplication(iUserService)
+	userService, err := NewUserApplication(iUserService, configFactory)
+	if err != nil {
+		return nil, err
+	}
 	return userService, nil
 }
 

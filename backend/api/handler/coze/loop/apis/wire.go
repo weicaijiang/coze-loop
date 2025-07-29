@@ -90,6 +90,7 @@ func InitFoundationHandler(
 	idgen idgen.IIDGenerator,
 	db db.Provider,
 	objectStorage fileserver.BatchObjectStorage,
+	configFactory conf.IConfigLoaderFactory,
 ) (*FoundationHandler, error) {
 	wire.Build(
 		foundationSet,

@@ -8,7 +8,6 @@ package apis
 
 import (
 	"context"
-
 	"github.com/cloudwego/kitex/pkg/endpoint"
 	"github.com/coze-dev/coze-loop/backend/infra/ck"
 	"github.com/coze-dev/coze-loop/backend/infra/db"
@@ -42,7 +41,7 @@ import (
 
 // Injectors from wire.go:
 
-func InitFoundationHandler(idgen2 idgen.IIDGenerator, db2 db.Provider, objectStorage fileserver.BatchObjectStorage) (*FoundationHandler, error) {
+func InitFoundationHandler(idgen2 idgen.IIDGenerator, db2 db.Provider, objectStorage fileserver.BatchObjectStorage, configFactory conf.IConfigLoaderFactory) (*FoundationHandler, error) {
 	authService, err := application.InitAuthApplication(idgen2, db2)
 	if err != nil {
 		return nil, err
@@ -55,7 +54,7 @@ func InitFoundationHandler(idgen2 idgen.IIDGenerator, db2 db.Provider, objectSto
 	if err != nil {
 		return nil, err
 	}
-	userService, err := application.InitUserApplication(idgen2, db2)
+	userService, err := application.InitUserApplication(idgen2, db2, configFactory)
 	if err != nil {
 		return nil, err
 	}

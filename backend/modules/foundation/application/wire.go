@@ -23,6 +23,7 @@ import (
 	auth2 "github.com/coze-dev/coze-loop/backend/modules/foundation/infra/auth"
 	"github.com/coze-dev/coze-loop/backend/modules/foundation/infra/repo"
 	"github.com/coze-dev/coze-loop/backend/modules/foundation/infra/repo/mysql"
+	"github.com/coze-dev/coze-loop/backend/pkg/conf"
 )
 
 var (
@@ -92,6 +93,7 @@ func InitSpaceApplication(
 func InitUserApplication(
 	idgen idgen.IIDGenerator,
 	db db.Provider,
+	configFactory conf.IConfigLoaderFactory,
 ) (user.UserService, error) {
 	wire.Build(userSet)
 	return nil, nil

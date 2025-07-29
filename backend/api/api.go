@@ -52,7 +52,7 @@ func Init(
 	ckDB ck.Provider,
 	translater i18n.ITranslater,
 ) (*apis.APIHandler, error) {
-	foundationHandler, err := apis.InitFoundationHandler(idgen, db, batchObjectStorage)
+	foundationHandler, err := apis.InitFoundationHandler(idgen, db, batchObjectStorage, configFactory)
 	if err != nil {
 		return nil, err
 	}

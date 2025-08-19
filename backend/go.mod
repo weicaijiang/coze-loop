@@ -20,13 +20,13 @@ require (
 	github.com/bytedance/gopkg v0.1.2
 	github.com/bytedance/sonic v1.13.2
 	github.com/cenk/backoff v2.2.1+incompatible
-	github.com/cloudwego/eino v0.3.27
+	github.com/cloudwego/eino v0.3.55
 	github.com/cloudwego/eino-ext/components/model/ark v0.1.8
 	github.com/cloudwego/eino-ext/components/model/arkbot v0.0.0-20250520101807-b2008771903a
 	github.com/cloudwego/eino-ext/components/model/claude v0.0.0-20250513023651-7b19c6ffbf4a
 	github.com/cloudwego/eino-ext/components/model/deepseek v0.0.0-20250514085234-473e80da5261
 	github.com/cloudwego/eino-ext/components/model/gemini v0.0.0-20250520101807-b2008771903a
-	github.com/cloudwego/eino-ext/components/model/ollama v0.0.0-20250520101807-b2008771903a
+	github.com/cloudwego/eino-ext/components/model/ollama v0.1.0
 	github.com/cloudwego/eino-ext/components/model/openai v0.0.0-20250513023651-7b19c6ffbf4a
 	github.com/cloudwego/eino-ext/components/model/qianfan v0.0.0-20250520101807-b2008771903a
 	github.com/cloudwego/eino-ext/components/model/qwen v0.0.0-20250520101807-b2008771903a
@@ -42,7 +42,7 @@ require (
 	github.com/dimchansky/utfbom v1.1.1
 	github.com/dolthub/go-mysql-server v0.18.0
 	github.com/dolthub/vitess v0.0.0-20240228192915-d55088cef56a
-	github.com/expr-lang/expr v1.15.8
+	github.com/expr-lang/expr v1.17.0
 	github.com/fatih/structs v1.1.0
 	github.com/fsnotify/fsnotify v1.8.0
 	github.com/getkin/kin-openapi v0.118.0
@@ -63,7 +63,7 @@ require (
 	github.com/modern-go/reflect2 v1.0.2
 	github.com/nicksnyder/go-i18n/v2 v2.6.0
 	github.com/ohler55/ojg v1.26.8
-	github.com/ollama/ollama v0.5.12
+	github.com/ollama/ollama v0.10.1
 	github.com/panjf2000/ants/v2 v2.11.3
 	github.com/parquet-go/parquet-go v0.25.0
 	github.com/pkg/errors v0.9.2-0.20201214064552-5dd12d0cfe7f

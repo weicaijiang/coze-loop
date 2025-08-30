@@ -1,0 +1,1 @@
+https://download.docker.com/mac/stable/24012/Docker.dmg

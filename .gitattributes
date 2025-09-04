@@ -12,3 +12,15 @@ yarn.lock merge=binary
 # For more information, see this issue: https://github.com/microsoft/rushstack/issues/1088
 #
 *.json linguist-language=JSON-with-Comments
+
+# 设置所有文本文件使用LF换行符
+* text=auto eol=lf
+
+# 明确指定特定文件类型的换行符
+*.js eol=lf
+*.ts eol=lf
+*.go eol=lf
+*.md eol=lf
+*.yaml eol=lf
+*.yml eol=lf
+*.sh eol=lf

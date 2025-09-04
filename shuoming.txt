@@ -1,1 +1,4 @@
 https://download.docker.com/mac/stable/24012/Docker.dmg
+
+windows编译
+d:\soft\mingw\bin\mingw32-make.exe compose-up 
